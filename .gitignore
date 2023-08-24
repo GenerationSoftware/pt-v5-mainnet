@@ -1,0 +1,18 @@
+# Compiler files
+cache/
+coverage/
+out/
+
+# Ignores broadcast logs
+!broadcast
+broadcast/*
+
+# Ignores local deployments
+deployments/local/*
+
+.DS_Store
+.envrc
+node_modules
+
+# VS Code history
+.history
