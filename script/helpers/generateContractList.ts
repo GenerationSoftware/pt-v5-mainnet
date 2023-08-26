@@ -178,12 +178,7 @@ export const generateContractList = (deploymentPaths: string[]): ContractList =>
 
         if (transactionType === "CREATE") {
           contractList.contracts.push(
-            formatContract(
-              chainId,
-              contractName,
-              contractAddress,
-              deployArguments
-            )
+            formatContract(chainId, contractName, contractAddress, deployArguments)
           );
         }
       }
@@ -193,9 +188,7 @@ export const generateContractList = (deploymentPaths: string[]): ContractList =>
   return contractList;
 };
 
-export const generateVaultList = (
-  vaultDeploymentPath: string
-): VaultList => {
+export const generateVaultList = (vaultDeploymentPath: string): VaultList => {
   const vaultList: VaultList = {
     name: "PoolTogether Mainnet Vault List",
     keywords: ["pooltogether"],
@@ -211,9 +204,7 @@ export const generateVaultList = (
   vaultTransactions.forEach(
     ({ transactionType, contractName, contractAddress, arguments: deployArguments }) => {
       if (transactionType === "CREATE" && contractName === "VaultMintRate") {
-        vaultList.tokens.push(
-          generateVaultInfo(chainId, contractAddress, deployArguments)
-        );
+        vaultList.tokens.push(generateVaultInfo(chainId, contractAddress, deployArguments));
       }
     }
   );

@@ -1,6 +1,3 @@
-[submodule "lib/ds-test"]
-	path = lib/ds-test
-	url = https://github.com/dapphub/ds-test
 [submodule "lib/forge-std"]
 	branch = v1
 	path = lib/forge-std
@@ -32,10 +29,16 @@
 	url = https://github.com/generationsoftware/pt-v5-claimer
 [submodule "lib/pt-v5-chainlink-vrf-v2-direct"]
 	path = lib/pt-v5-chainlink-vrf-v2-direct
-	url = https://github.com/GenerationSoftware/pt-v5-chainlink-vrf-v2-direct
+	url = https://github.com/generationsoftware/pt-v5-chainlink-vrf-v2-direct
 [submodule "lib/pt-v5-twab-controller"]
 	path = lib/pt-v5-twab-controller
 	url = https://github.com/generationsoftware/pt-v5-twab-controller
 [submodule "lib/pt-v5-twab-delegator"]
 	path = lib/pt-v5-twab-delegator
-	url = https://github.com/GenerationSoftware/pt-v5-twab-delegator
+	url = https://github.com/generationsoftware/pt-v5-twab-delegator
+[submodule "lib/yield-daddy"]
+	path = lib/yield-daddy
+	url = https://github.com/timeless-fi/yield-daddy
+[submodule "lib/aave-address-book"]
+	path = lib/aave-address-book
+	url = https://github.com/bgd-labs/aave-address-book

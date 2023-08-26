@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
 import "forge-std/Test.sol";
@@ -13,7 +13,9 @@ import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
 import { Vault } from "pt-v5-vault/Vault.sol";
 import { YieldVault } from "pt-v5-vault-mock/YieldVault.sol";
 
-contract Helpers is Test {
+import { Constants } from "../../src/Constants.sol";
+
+contract TestHelpers is Constants, Test {
   /* ============ Deposit ============ */
   function _deposit(
     IERC20 _underlyingAsset,

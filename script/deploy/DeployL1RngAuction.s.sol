@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
 import "forge-std/console2.sol";
@@ -12,11 +12,9 @@ import { RngAuction } from "pt-v5-draw-auction/RngAuction.sol";
 import { RngAuctionRelayerRemoteOwner } from "pt-v5-draw-auction/RngAuctionRelayerRemoteOwner.sol";
 import { RngRelayAuction } from "pt-v5-draw-auction/RngRelayAuction.sol";
 
-import { Helpers } from "../helpers/Helpers.sol";
+import { ScriptHelpers } from "../helpers/ScriptHelpers.sol";
 
-import { Constants, DRAW_PERIOD_SECONDS, AUCTION_DURATION, AUCTION_TARGET_SALE_TIME, CHAINLINK_CALLBACK_GAS_LIMIT, CHAINLINK_REQUEST_CONFIRMATIONS } from "./Constants.sol";
-
-contract DeployL1RngAuction is Helpers {
+contract DeployL1RngAuction is ScriptHelpers {
   function run() public {
     vm.startBroadcast();
 
@@ -34,7 +32,7 @@ contract DeployL1RngAuction is Helpers {
       RNGInterface(chainlinkRng),
       address(this),
       DRAW_PERIOD_SECONDS,
-      Constants.auctionOffset(),
+      _auctionOffset(),
       AUCTION_DURATION,
       AUCTION_TARGET_SALE_TIME
     );

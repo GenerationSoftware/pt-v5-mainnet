@@ -1,51 +1,37 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
 import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/StdJson.sol";
-import { strings } from "solidity-stringutils/strings.sol";
+
+import { LinkTokenInterface } from "chainlink/interfaces/LinkTokenInterface.sol";
+import { VRFV2WrapperInterface } from "chainlink/interfaces/VRFV2WrapperInterface.sol";
+import { ERC4626 } from "openzeppelin/token/ERC20/extensions/ERC4626.sol";
 import { Strings } from "openzeppelin/utils/Strings.sol";
+import { UD2x18, ud2x18 } from "prb-math/UD2x18.sol";
+import { SD1x18, sd1x18 } from "prb-math/SD1x18.sol";
+import { strings } from "solidity-stringutils/strings.sol";
+import { AaveV3ERC4626Factory } from "yield-daddy/aave-v3/AaveV3ERC4626Factory.sol";
 
 import { Claimer } from "pt-v5-claimer/Claimer.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
 import { PrizePool } from "pt-v5-prize-pool/PrizePool.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
 import { RngAuctionRelayer } from "pt-v5-draw-auction/abstract/RngAuctionRelayer.sol";
+import { Vault } from "pt-v5-vault/Vault.sol";
 
-import { ERC20Mintable } from "../../src/ERC20Mintable.sol";
-import { MarketRate } from "../../src/MarketRate.sol";
-import { TokenFaucet } from "../../src/TokenFaucet.sol";
-import { VaultMintRate } from "../../src/VaultMintRate.sol";
-import { YieldVaultMintRate } from "../../src/YieldVaultMintRate.sol";
+import { Constants } from "../../src/Constants.sol";
 
-import { LinkTokenInterface } from "chainlink/interfaces/LinkTokenInterface.sol";
-import { VRFV2WrapperInterface } from "chainlink/interfaces/VRFV2WrapperInterface.sol";
-
-// Testnet deployment paths
-uint256 constant ETHEREUM_CHAIN_ID = 1;
-uint256 constant OPTIMISM_CHAIN_ID = 10;
-string constant ETHEREUM_PATH = "broadcast/Deploy.s.sol/1/";
-string constant OPTIMISM_PATH = "broadcast/Deploy.s.sol/10/";
-string constant LOCAL_PATH = "/broadcast/Deploy.s.sol/31337";
-
-abstract contract Helpers is Script {
+abstract contract ScriptHelpers is Constants, Script {
   using strings for *;
   using stdJson for string;
 
   /* ============ Constants ============ */
-  uint8 internal constant DEFAULT_TOKEN_DECIMAL = 18;
-  uint8 internal constant USDC_TOKEN_DECIMAL = 6;
 
-  uint256 internal constant USDC_PRICE = 100000000;
-  uint256 internal constant POOL_PRICE = 100000000;
-  uint256 internal constant ETH_PRICE = 166876925050;
-  uint256 internal constant PRIZE_TOKEN_PRICE = 1e18;
-
-  uint256 internal constant ONE_YEAR_IN_SECONDS = 31557600;
-
-  address internal constant ETHEREUM_DEFENDER_ADDRESS = 0xA2A8BccD38138f1169ADdb0f3df9236a3CCCd753;
-  address internal constant OPTIMISM_DEFENDER_ADDRESS =
-    0xCeA11E14067697C085e1142afd2540b23f18304D;
+  // Deployment paths
+  string internal constant ETHEREUM_PATH = "broadcast/Deploy.s.sol/1/";
+  string internal constant OPTIMISM_PATH = "broadcast/Deploy.s.sol/10/";
+  string internal constant LOCAL_PATH = "/broadcast/Deploy.s.sol/31337";
 
   string internal DEPLOY_POOL_SCRIPT;
 
@@ -56,6 +42,26 @@ abstract contract Helpers is Script {
   }
 
   /* ============ Helpers ============ */
+
+  /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
+  function _auctionOffset() internal view returns (uint32) {
+    return uint32(_firstDrawStartsAt() - 10 * DRAW_PERIOD_SECONDS);
+  }
+
+  function CLAIMER_MAX_FEE_PERCENT() internal pure returns (UD2x18) {
+    return ud2x18(0.5e18);
+  }
+
+  /// @notice Returns the timestamp of the start of tomorrow.
+  function _firstDrawStartsAt() internal view returns (uint64) {
+    uint256 startOfTodayInDays = block.timestamp / 1 days;
+    uint256 startOfTomorrowInSeconds = (startOfTodayInDays + 1) * 1 days;
+
+    if (startOfTomorrowInSeconds - block.timestamp < MIN_TIME_AHEAD) {
+      startOfTomorrowInSeconds += MIN_TIME_AHEAD;
+    }
+    return uint64(startOfTomorrowInSeconds);
+  }
 
   function _toDecimals(uint256 _amount, uint8 _decimals) internal pure returns (uint256) {
     return _amount * (10 ** _decimals);
@@ -213,10 +219,6 @@ abstract contract Helpers is Script {
     revert(_errorMsg);
   }
 
-  function _matches(string memory a, string memory b) internal pure returns (bool) {
-    return keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b)));
-  }
-
   function _getDeployPath(string memory _deployPath) internal view returns (string memory) {
     return _getDeployPathWithChainId(_deployPath, block.chainid);
   }
@@ -277,52 +279,38 @@ abstract contract Helpers is Script {
       );
   }
 
-  function _getToken(
-    string memory _tokenSymbol
-  ) internal returns (ERC20) {
-    if (block.chainid == ETHEREUM_CHAIN_ID) {
-      if (_matches(_tokenSymbol, "USDC")) {
-        return ERC20(address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48));
-      }
-
-      if (_matches(_tokenSymbol, "WETH")) {
-        return ERC20(address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2));
-      }
-    }
-
-    if (block.chainid == OPTIMISM_CHAIN_ID) {
-      if (_matches(_tokenSymbol, "USDC")) {
-        return ERC20(address(0x7F5c764cBc14f9669B88837ca1490cCa17c31607));
-      }
-
-      if (_matches(_tokenSymbol, "WETH")) {
-        return ERC20(address(0x4200000000000000000000000000000000000006));
-      }
-    }
-  }
-
-  function _getVault(string memory _tokenSymbol) internal returns (VaultMint) {
-    string memory deployPath = _getDeployPath("DeployVault.s.sol");
-    address tokenAddress = _getTokenAddress(
+  function _getVault(string memory _tokenSymbol) internal returns (Vault) {
+    return Vault(_getTokenAddress(
       "Vault",
       _tokenSymbol,
       2,
-      deployPath,
+      _getDeployPath("DeployVault.s.sol"),
       "vault-not-found"
-    );
-    return Vault(tokenAddress);
+    ));
   }
 
-  function _getYieldVault(string memory _tokenSymbol) internal returns (YieldVaultMintRate) {
-    string memory deployPath = _getDeployPath("DeployYieldVault.s.sol");
-    address tokenAddress = _getTokenAddress(
-      "YieldVaultMintRate",
+  // Yield Vaults
+  // Aave V3
+
+  function _getAaveV3Factory() internal returns (AaveV3ERC4626Factory) {
+    return
+      AaveV3ERC4626Factory(
+        _getContractAddress(
+          "AaveV3ERC4626Factory",
+          _getDeployPath("DeployAaveV3Factory.s.sol"),
+          "aave-3-factory-not-found"
+        )
+      );
+  }
+
+  function _getAaveV3YieldVault(string memory _tokenSymbol) internal returns (ERC4626) {
+    return ERC4626(_getTokenAddress(
+      "AaveV3ERC4626",
       _tokenSymbol,
       2,
-      deployPath,
+      _getDeployPath("DeployAaveV3YieldVault.s.sol"),
       "yield-vault-not-found"
-    );
-    return YieldVaultMintRate(tokenAddress);
+    ));
   }
 
   function _getLinkToken() internal view returns (LinkTokenInterface) {

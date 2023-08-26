@@ -1,9 +1,11 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
 import "forge-std/console2.sol";
 
 import { Script } from "forge-std/Script.sol";
+
+import { ERC20 } from "openzeppelin/token/ERC20/ERC20.sol";
 
 import { PrizePool, ConstructorParams } from "pt-v5-prize-pool/PrizePool.sol";
 import { sd1x18 } from "prb-math/SD1x18.sol";
@@ -16,22 +18,14 @@ import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
 import { RemoteOwner } from "remote-owner/RemoteOwner.sol";
 import { RngRelayAuction } from "pt-v5-draw-auction/RngRelayAuction.sol";
 
-import { ERC20Mintable } from "../../src/ERC20Mintable.sol";
-import { ERC20, YieldVaultMintRate } from "../../src/YieldVaultMintRate.sol";
+import { ScriptHelpers } from "../helpers/ScriptHelpers.sol";
 
-import { Helpers } from "../helpers/Helpers.sol";
-
-import { Constants, DRAW_PERIOD_SECONDS, GRAND_PRIZE_PERIOD_DRAWS, TIER_SHARES, RESERVE_SHARES, AUCTION_DURATION, TWAB_PERIOD_LENGTH, AUCTION_TARGET_SALE_TIME, CLAIMER_MAX_FEE, CLAIMER_MIN_FEE, ERC5164_EXECUTOR_GOERLI_OPTIMISM } from "./Constants.sol";
-
-contract DeployL2PrizePool is Helpers {
+contract DeployL2PrizePool is ScriptHelpers {
   function run() public {
     vm.startBroadcast();
 
-    ERC20Mintable prizeToken = _getToken("POOL", _tokenDeployPath);
-    TwabController twabController = new TwabController(
-      TWAB_PERIOD_LENGTH,
-      Constants.auctionOffset()
-    );
+    ERC20 prizeToken = ERC20(_getToken("POOL"));
+    TwabController twabController = new TwabController(TWAB_PERIOD_LENGTH, _auctionOffset());
 
     console2.log("constructing prize pool....");
 
@@ -41,7 +35,7 @@ contract DeployL2PrizePool is Helpers {
         twabController,
         address(0),
         DRAW_PERIOD_SECONDS,
-        Constants.firstDrawStartsAt(), // drawStartedAt
+        _firstDrawStartsAt(), // drawStartedAt
         sd1x18(0.3e18), // alpha
         GRAND_PRIZE_PERIOD_DRAWS,
         uint8(3), // minimum number of tiers
@@ -54,7 +48,7 @@ contract DeployL2PrizePool is Helpers {
 
     RemoteOwner remoteOwner = new RemoteOwner(
       5,
-      ERC5164_EXECUTOR_GOERLI_OPTIMISM,
+      ERC5164_EXECUTOR_OPTIMISM,
       address(_getL1RngAuctionRelayerRemote())
     );
 
@@ -72,7 +66,7 @@ contract DeployL2PrizePool is Helpers {
       CLAIMER_MIN_FEE,
       CLAIMER_MAX_FEE,
       DRAW_PERIOD_SECONDS,
-      Constants.CLAIMER_MAX_FEE_PERCENT()
+      CLAIMER_MAX_FEE_PERCENT()
     );
 
     LiquidationPairFactory liquidationPairFactory = new LiquidationPairFactory();

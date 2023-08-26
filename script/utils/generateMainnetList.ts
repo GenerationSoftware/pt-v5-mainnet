@@ -31,13 +31,5 @@ const optimismDeploymentPaths = [
   optimismVaultDeploymentPath,
 ];
 
-writeList(
-  generateContractList(optimismDeploymentPaths),
-  "deployments/optimism",
-  "contracts"
-);
-writeList(
-  generateVaultList(optimismVaultDeploymentPath),
-  "deployments/optimism",
-  "vaults"
-);
+writeList(generateContractList(optimismDeploymentPaths), "deployments/optimism", "contracts");
+writeList(generateVaultList(optimismVaultDeploymentPath), "deployments/optimism", "vaults");

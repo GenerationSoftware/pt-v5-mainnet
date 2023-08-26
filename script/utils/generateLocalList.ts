@@ -18,8 +18,4 @@ const deploymentPaths = [
 ];
 
 writeList(generateContractList(deploymentPaths), "deployments/local", "contracts");
-writeList(
-  generateVaultList(vaultDeploymentPath),
-  "deployments/local",
-  "vaults"
-);
+writeList(generateVaultList(vaultDeploymentPath), "deployments/local", "vaults");

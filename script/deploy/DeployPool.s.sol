@@ -1,50 +1,39 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
 import "forge-std/console2.sol";
 
 import { Script } from "forge-std/Script.sol";
 
-import { PrizePool, ConstructorParams, SD59x18 } from "pt-v5-prize-pool/PrizePool.sol";
+import { VRFV2WrapperInterface } from "chainlink/interfaces/VRFV2WrapperInterface.sol";
+import { ERC20 } from "openzeppelin/token/ERC20/ERC20.sol";
 import { ud2x18 } from "prb-math/UD2x18.sol";
 import { sd1x18 } from "prb-math/SD1x18.sol";
-import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
+
+import { ChainlinkVRFV2Direct } from "pt-v5-chainlink-vrf-v2-direct/ChainlinkVRFV2Direct.sol";
+import { ChainlinkVRFV2DirectRngAuctionHelper } from "pt-v5-chainlink-vrf-v2-direct/ChainlinkVRFV2DirectRngAuctionHelper.sol";
+import { IRngAuction } from "pt-v5-chainlink-vrf-v2-direct/interfaces/IRngAuction.sol";
 import { Claimer } from "pt-v5-claimer/Claimer.sol";
 import { ILiquidationSource } from "pt-v5-liquidator-interfaces/ILiquidationSource.sol";
 import { LiquidationPair } from "pt-v5-cgda-liquidator/LiquidationPair.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
-import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
-import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
-
-import { LinkTokenInterface } from "chainlink/interfaces/LinkTokenInterface.sol";
-import { VRFV2WrapperInterface } from "chainlink/interfaces/VRFV2WrapperInterface.sol";
-
-import { IRngAuction } from "pt-v5-chainlink-vrf-v2-direct/interfaces/IRngAuction.sol";
-import { ChainlinkVRFV2Direct } from "pt-v5-chainlink-vrf-v2-direct/ChainlinkVRFV2Direct.sol";
-import { ChainlinkVRFV2DirectRngAuctionHelper } from "pt-v5-chainlink-vrf-v2-direct/ChainlinkVRFV2DirectRngAuctionHelper.sol";
-
-import { RNGInterface } from "rng/RNGInterface.sol";
 import { RngAuction } from "pt-v5-draw-auction/RngAuction.sol";
 import { RngAuctionRelayerDirect } from "pt-v5-draw-auction/RngAuctionRelayerDirect.sol";
 import { RngRelayAuction } from "pt-v5-draw-auction/RngRelayAuction.sol";
+import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
+import { PrizePool, ConstructorParams, SD59x18 } from "pt-v5-prize-pool/PrizePool.sol";
+import { RNGInterface } from "rng/RNGInterface.sol";
+import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
+import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
 
-import { ERC20Mintable } from "../../src/ERC20Mintable.sol";
-import { VaultMintRate } from "../../src/VaultMintRate.sol";
-import { ERC20, YieldVaultMintRate } from "../../src/YieldVaultMintRate.sol";
+import { ScriptHelpers } from "../helpers/ScriptHelpers.sol";
 
-import { Helpers } from "../helpers/Helpers.sol";
-
-import { Constants, DRAW_PERIOD_SECONDS, GRAND_PRIZE_PERIOD_DRAWS, TIER_SHARES, RESERVE_SHARES, AUCTION_DURATION, TWAB_PERIOD_LENGTH, AUCTION_TARGET_SALE_TIME, CLAIMER_MAX_FEE, CLAIMER_MIN_FEE } from "./Constants.sol";
-
-contract DeployPool is Helpers {
+contract DeployPool is ScriptHelpers {
   function run() public {
     vm.startBroadcast();
 
-    ERC20Mintable prizeToken = _getToken("POOL", _tokenDeployPath);
-    TwabController twabController = new TwabController(
-      TWAB_PERIOD_LENGTH,
-      Constants.auctionOffset()
-    );
+    ERC20 prizeToken = ERC20(_getToken("POOL"));
+    TwabController twabController = new TwabController(TWAB_PERIOD_LENGTH, _auctionOffset());
 
     uint64 firstDrawStartsAt = uint64(block.timestamp);
     uint64 auctionDuration = DRAW_PERIOD_SECONDS / 4;
@@ -108,7 +97,7 @@ contract DeployPool is Helpers {
       CLAIMER_MIN_FEE,
       CLAIMER_MAX_FEE,
       DRAW_PERIOD_SECONDS,
-      Constants.CLAIMER_MAX_FEE_PERCENT()
+      CLAIMER_MAX_FEE_PERCENT()
     );
 
     LiquidationPairFactory liquidationPairFactory = new LiquidationPairFactory();

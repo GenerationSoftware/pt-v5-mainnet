@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
 import "forge-std/Test.sol";
@@ -29,8 +29,9 @@ import { Vault } from "pt-v5-vault/Vault.sol";
 import { YieldVault } from "pt-v5-vault-mock/YieldVault.sol";
 
 import { Utils } from "./Utils.t.sol";
+import { TestHelpers } from "./TestHelpers.t.sol";
 
-contract ForkBaseSetup is Test {
+contract ForkBaseSetup is TestHelpers {
   /* ============ Variables ============ */
   Utils internal utils;
 
@@ -51,8 +52,8 @@ contract ForkBaseSetup is Test {
   RngRelayAuction public rngRelayAuction;
 
   Vault public vault;
-  string public vaultName = "PoolTogether aEthDAI Prize Token (PTaEthDAI)";
-  string public vaultSymbol = "PTaEthDAI";
+  string public vaultName = "PoolTogether aOpUSDC Prize Token (PTaOpUSDC)";
+  string public vaultSymbol = "PTaOpUSDC";
 
   address public underlyingAssetAddress;
   IERC20 public underlyingAsset;
@@ -86,10 +87,10 @@ contract ForkBaseSetup is Test {
     vm.label(alice, "Alice");
     vm.label(bob, "Bob");
 
-    underlyingAssetAddress = address(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48); // USDC token on Ethereum
+    underlyingAssetAddress = _yieldVault.asset(); // USDC token on Optimism
     underlyingAsset = IERC20(underlyingAssetAddress);
 
-    prizeTokenAddress = address(0x0cEC1A9154Ff802e7934Fc916Ed7Ca50bDE6844e); // POOL token on Ethereum
+    prizeTokenAddress = _getToken("POOL"); // POOL token on Optimism
     prizeToken = IERC20(prizeTokenAddress);
 
     twabController = new TwabController(1 days, uint32(block.timestamp));
@@ -98,6 +99,7 @@ contract ForkBaseSetup is Test {
     uint64 auctionDuration = uint64(drawPeriodSeconds / 4);
     uint64 auctionTargetSaleTime = uint64(auctionDuration / 2);
 
+    // TODO: needs to be exported in an L1 script
     linkToken = LinkTokenInterface(address(0x514910771AF9Ca656af840dff83E8264EcF986CA)); // LINK on Ethereum
     vrfV2Wrapper = VRFV2WrapperInterface(address(0x5A861794B927983406fCE1D062e00b9368d97Df6)); // VRF V2 Wrapper on Ethereum
 
