@@ -5,7 +5,7 @@ import { AaveV3ERC4626Factory, ERC20 } from "yield-daddy/aave-v3/AaveV3ERC4626Fa
 
 import { ScriptHelpers } from "../../../helpers/ScriptHelpers.sol";
 
-contract DeployYieldVault is ScriptHelpers {
+contract DeployAaveV3YieldVault is ScriptHelpers {
   function run() public {
     vm.startBroadcast();
 

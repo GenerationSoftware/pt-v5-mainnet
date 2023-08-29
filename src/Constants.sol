@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
+import { SD1x18, sd1x18 } from "prb-math/SD1x18.sol";
+import { convert, SD59x18 } from "prb-math/SD59x18.sol";
+import { UD2x18, ud2x18 } from "prb-math/UD2x18.sol";
+
 abstract contract Constants {
   // Addresses
   // Defender
@@ -25,19 +29,71 @@ abstract contract Constants {
 
   // Claimer
   uint256 internal constant CLAIMER_MIN_FEE = 0.0001e18;
-  uint256 internal constant CLAIMER_MAX_FEE = 1000e18;
+  uint256 internal constant CLAIMER_MAX_FEE = 10000e18;
+
+  function _getClaimerMaxFeePortionOfPrize() internal pure returns (UD2x18) {
+    return ud2x18(0.5e18);
+  }
+
+  // Liquidation Pair
+  uint104 internal constant VIRTUAL_RESERVE_IN = 10e18;
+
+  /**
+   * @notice Get exchange rate for liquidation pair `virtualReserveOut`.
+   * @param _tokenPrice Price of the token represented in 8 decimals
+   * @param _decimalOffset Offset between the prize token decimals and the token decimals
+   */
+  function _getExchangeRate(
+    uint256 _tokenPrice,
+    uint8 _decimalOffset
+  ) internal pure returns (uint104) {
+    return uint104((PRIZE_TOKEN_PRICE * 1e8) / (_tokenPrice * (10 ** _decimalOffset)));
+  }
+
+  function _getTargetFirstSaleTime(uint32 _drawPeriodSeconds) internal pure returns (uint32) {
+    return _drawPeriodSeconds / 2;
+  }
+
+  /**
+   * @notice Get Liquidation Pair decay constant.
+   * @dev This is approximately the maximum decay constant, as the CGDA formula requires computing e^(decayConstant * time).
+   *      Since the data type is SD59x18 and e^134 ~= 1e58, we can divide 134 by the draw period to get the max decay constant.
+   */
+  function _getDecayConstant() internal pure returns (SD59x18) {
+    return convert(130).div(convert(int(uint(DRAW_PERIOD_SECONDS))));
+  }
 
   // Prize Pool
-  uint8 internal constant TIER_SHARES = 100;
-  uint8 internal constant RESERVE_SHARES = 100;
-  uint24 internal constant GRAND_PRIZE_PERIOD_DRAWS = 12;
-  uint32 internal constant DRAW_PERIOD_SECONDS = 4 hours;
+  uint32 internal constant DRAW_PERIOD_SECONDS = 1 days;
+  uint24 internal constant GRAND_PRIZE_PERIOD_DRAWS = 180; // Every 6 months for daily draws
+  uint8 internal constant MIN_NUMBER_OF_TIERS = 3;
   uint256 internal constant MIN_TIME_AHEAD = DRAW_PERIOD_SECONDS;
+  uint8 internal constant RESERVE_SHARES = 100;
+  uint8 internal constant TIER_SHARES = 100;
+
+  function _getContributionsSmoothing() internal pure returns (SD1x18) {
+    return sd1x18(0.3e18);
+  }
+
+  /// @notice Returns the start timestamp of the first draw.
+  function _getFirstDrawStartsAt() internal view returns (uint64) {
+    uint256 startOfTodayInDays = block.timestamp / 1 days;
+    uint256 startOfTomorrowInSeconds = (startOfTodayInDays + 1) * 1 days;
+
+    if (startOfTomorrowInSeconds - block.timestamp < MIN_TIME_AHEAD) {
+      startOfTomorrowInSeconds += MIN_TIME_AHEAD;
+    }
+    return uint64(startOfTomorrowInSeconds);
+  }
 
   // RngAuctions
-  // two auctions should end at the latest halfway through the draw period
-  uint64 internal constant AUCTION_DURATION = DRAW_PERIOD_SECONDS / 4;
-  uint64 internal constant AUCTION_TARGET_SALE_TIME = AUCTION_DURATION / 4;
+  uint64 internal constant AUCTION_DURATION = 6 hours;
+  uint64 internal constant AUCTION_TARGET_SALE_TIME = 1 hours;
+
+  /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
+  function _getAuctionOffset() internal view returns (uint32) {
+    return uint32(_getFirstDrawStartsAt() - 10 * DRAW_PERIOD_SECONDS);
+  }
 
   // Twab
   // nice round fraction of the draw period
@@ -62,8 +118,11 @@ abstract contract Constants {
   // Token prices
   uint256 internal constant USDC_PRICE = 100000000;
   uint256 internal constant POOL_PRICE = 100000000;
-  uint256 internal constant ETH_PRICE = 166876925050;
+  uint256 internal constant ETH_PRICE = 164594000000;
   uint256 internal constant PRIZE_TOKEN_PRICE = 1e18;
+
+  // Vault
+  uint256 internal constant YIELD_FEE_PERCENTAGE = 100000000; // 0.1 = 10%
 
   function _matches(string memory a, string memory b) internal pure returns (bool) {
     return keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b)));

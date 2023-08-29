@@ -26,7 +26,10 @@ contract DepositAaveV3ForkTest is ForkAaveV3Setup {
     assertEq(twabController.delegateBalanceOf(address(vault), alice), _amount);
 
     assertEq(aToken.balanceOf(address(yieldVault)), _yieldVaultATokenBalanceBefore + _amount);
-    assertEq(underlyingAsset.balanceOf(address(aToken)), _aTokenUnderlyingAssetBalanceBefore + _amount);
+    assertEq(
+      underlyingAsset.balanceOf(address(aToken)),
+      _aTokenUnderlyingAssetBalanceBefore + _amount
+    );
 
     assertEq(yieldVault.convertToAssets(yieldVault.balanceOf(address(vault))), _amount);
 
@@ -53,7 +56,10 @@ contract DepositAaveV3ForkTest is ForkAaveV3Setup {
     assertEq(twabController.delegateBalanceOf(address(vault), SPONSORSHIP_ADDRESS), 0);
 
     assertEq(aToken.balanceOf(address(yieldVault)), _yieldVaultATokenBalanceBefore + _amount);
-    assertEq(underlyingAsset.balanceOf(address(aToken)), _aTokenUnderlyingAssetBalanceBefore + _amount);
+    assertEq(
+      underlyingAsset.balanceOf(address(aToken)),
+      _aTokenUnderlyingAssetBalanceBefore + _amount
+    );
 
     assertEq(yieldVault.convertToAssets(yieldVault.balanceOf(address(vault))), _amount);
 
@@ -82,7 +88,10 @@ contract DepositAaveV3ForkTest is ForkAaveV3Setup {
     assertEq(twabController.delegateBalanceOf(address(vault), bob), _amount);
 
     assertEq(aToken.balanceOf(address(yieldVault)), _yieldVaultATokenBalanceBefore + _amount);
-    assertEq(underlyingAsset.balanceOf(address(aToken)), _aTokenUnderlyingAssetBalanceBefore + _amount);
+    assertEq(
+      underlyingAsset.balanceOf(address(aToken)),
+      _aTokenUnderlyingAssetBalanceBefore + _amount
+    );
 
     assertEq(yieldVault.convertToAssets(yieldVault.balanceOf(address(vault))), _amount);
 

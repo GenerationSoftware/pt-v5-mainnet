@@ -25,10 +25,10 @@ contract DeployTwabDelegator is ScriptHelpers {
     TwabController _twabController = _getTwabController();
 
     /* USDC */
-    _deployTwabDelegator(_twabController, _getVault("PTUSDC"));
+    _deployTwabDelegator(_twabController, _getVault("PTUSDCT"));
 
     /* wETH */
-    _deployTwabDelegator(_twabController, _getVault("PTWETH"));
+    _deployTwabDelegator(_twabController, _getVault("PTWETHT"));
   }
 
   function run() public {

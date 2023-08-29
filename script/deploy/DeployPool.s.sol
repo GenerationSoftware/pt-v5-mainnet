@@ -33,29 +33,23 @@ contract DeployPool is ScriptHelpers {
     vm.startBroadcast();
 
     ERC20 prizeToken = ERC20(_getToken("POOL"));
-    TwabController twabController = new TwabController(TWAB_PERIOD_LENGTH, _auctionOffset());
-
-    uint64 firstDrawStartsAt = uint64(block.timestamp);
-    uint64 auctionDuration = DRAW_PERIOD_SECONDS / 4;
-    uint64 auctionTargetSaleTime = auctionDuration / 2;
+    TwabController twabController = new TwabController(TWAB_PERIOD_LENGTH, _getAuctionOffset());
 
     console2.log("constructing rng stuff....");
 
-    uint32 _chainlinkCallbackGasLimit = 1_000_000;
-    uint16 _chainlinkRequestConfirmations = 3;
     ChainlinkVRFV2Direct chainlinkRng = new ChainlinkVRFV2Direct(
-      address(this), // owner
+      address(this), // TODO: who should be owner?
       _getLinkToken(),
       _getVrfV2Wrapper(),
-      _chainlinkCallbackGasLimit,
-      _chainlinkRequestConfirmations
+      CHAINLINK_CALLBACK_GAS_LIMIT,
+      CHAINLINK_REQUEST_CONFIRMATIONS
     );
 
     RngAuction rngAuction = new RngAuction(
       RNGInterface(chainlinkRng),
-      address(this),
+      address(this), // TODO: who should be owner?
       DRAW_PERIOD_SECONDS,
-      firstDrawStartsAt,
+      _getAuctionOffset(),
       AUCTION_DURATION,
       AUCTION_TARGET_SALE_TIME
     );
@@ -67,18 +61,18 @@ contract DeployPool is ScriptHelpers {
     console2.log("constructing prize pool....");
 
     PrizePool prizePool = new PrizePool(
-      ConstructorParams(
-        prizeToken,
-        twabController,
-        address(0),
-        DRAW_PERIOD_SECONDS,
-        firstDrawStartsAt, // drawStartedAt
-        sd1x18(0.9e18), // alpha
-        GRAND_PRIZE_PERIOD_DRAWS,
-        uint8(3), // minimum number of tiers
-        TIER_SHARES,
-        RESERVE_SHARES
-      )
+      ConstructorParams({
+        prizeToken: prizeToken,
+        twabController: twabController,
+        drawManager: msg.sender, // TODO: needs to be removed once we switch to ownable, the setDrawManager function can be used
+        drawPeriodSeconds: DRAW_PERIOD_SECONDS,
+        firstDrawStartsAt: _getFirstDrawStartsAt(),
+        smoothing: _getContributionsSmoothing(),
+        grandPrizePeriodDraws: GRAND_PRIZE_PERIOD_DRAWS,
+        numberOfTiers: MIN_NUMBER_OF_TIERS,
+        tierShares: TIER_SHARES,
+        reserveShares: RESERVE_SHARES
+      })
     );
 
     console2.log("constructing auction....");
@@ -86,8 +80,8 @@ contract DeployPool is ScriptHelpers {
     RngRelayAuction rngRelayAuction = new RngRelayAuction(
       prizePool,
       address(rngAuctionRelayerDirect),
-      auctionDuration,
-      auctionTargetSaleTime
+      AUCTION_DURATION,
+      AUCTION_TARGET_SALE_TIME
     );
 
     prizePool.setDrawManager(address(rngRelayAuction));
@@ -97,7 +91,7 @@ contract DeployPool is ScriptHelpers {
       CLAIMER_MIN_FEE,
       CLAIMER_MAX_FEE,
       DRAW_PERIOD_SECONDS,
-      CLAIMER_MAX_FEE_PERCENT()
+      _getClaimerMaxFeePortionOfPrize()
     );
 
     LiquidationPairFactory liquidationPairFactory = new LiquidationPairFactory();

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "forge-std/console2.sol";
+import { console2 } from "forge-std/console2.sol";
 
 import { IRngAuction } from "pt-v5-chainlink-vrf-v2-direct/interfaces/IRngAuction.sol";
 import { ChainlinkVRFV2Direct } from "pt-v5-chainlink-vrf-v2-direct/ChainlinkVRFV2Direct.sol";
@@ -21,7 +21,7 @@ contract DeployL1RngAuction is ScriptHelpers {
     console2.log("constructing rng stuff....");
 
     ChainlinkVRFV2Direct chainlinkRng = new ChainlinkVRFV2Direct(
-      address(this), // owner
+      address(this), // TODO: who should be owner?
       _getLinkToken(),
       _getVrfV2Wrapper(),
       CHAINLINK_CALLBACK_GAS_LIMIT,
@@ -30,9 +30,9 @@ contract DeployL1RngAuction is ScriptHelpers {
 
     RngAuction rngAuction = new RngAuction(
       RNGInterface(chainlinkRng),
-      address(this),
+      address(this), // TODO: who should be owner?
       DRAW_PERIOD_SECONDS,
-      _auctionOffset(),
+      _getAuctionOffset(),
       AUCTION_DURATION,
       AUCTION_TARGET_SALE_TIME
     );

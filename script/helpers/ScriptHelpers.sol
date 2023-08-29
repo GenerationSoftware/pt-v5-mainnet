@@ -19,6 +19,7 @@ import { PrizePool } from "pt-v5-prize-pool/PrizePool.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
 import { RngAuctionRelayer } from "pt-v5-draw-auction/abstract/RngAuctionRelayer.sol";
 import { Vault } from "pt-v5-vault/Vault.sol";
+import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
 
 import { Constants } from "../../src/Constants.sol";
 
@@ -43,40 +44,8 @@ abstract contract ScriptHelpers is Constants, Script {
 
   /* ============ Helpers ============ */
 
-  /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
-  function _auctionOffset() internal view returns (uint32) {
-    return uint32(_firstDrawStartsAt() - 10 * DRAW_PERIOD_SECONDS);
-  }
-
-  function CLAIMER_MAX_FEE_PERCENT() internal pure returns (UD2x18) {
-    return ud2x18(0.5e18);
-  }
-
-  /// @notice Returns the timestamp of the start of tomorrow.
-  function _firstDrawStartsAt() internal view returns (uint64) {
-    uint256 startOfTodayInDays = block.timestamp / 1 days;
-    uint256 startOfTomorrowInSeconds = (startOfTodayInDays + 1) * 1 days;
-
-    if (startOfTomorrowInSeconds - block.timestamp < MIN_TIME_AHEAD) {
-      startOfTomorrowInSeconds += MIN_TIME_AHEAD;
-    }
-    return uint64(startOfTomorrowInSeconds);
-  }
-
   function _toDecimals(uint256 _amount, uint8 _decimals) internal pure returns (uint256) {
     return _amount * (10 ** _decimals);
-  }
-
-  /**
-   * @notice Get exchange rate for liquidation pair `virtualReserveOut`.
-   * @param _tokenPrice Price of the token represented in 8 decimals
-   * @param _decimalOffset Offset between the prize token decimals and the token decimals
-   */
-  function _getExchangeRate(
-    uint256 _tokenPrice,
-    uint8 _decimalOffset
-  ) internal pure returns (uint128) {
-    return uint128((PRIZE_TOKEN_PRICE * 1e8) / (_tokenPrice * (10 ** _decimalOffset)));
   }
 
   function _getDeploymentArtifacts(
@@ -168,6 +137,7 @@ abstract contract ScriptHelpers is Constants, Script {
       string memory jsonFile = vm.readFile(
         string.concat(vm.projectRoot(), _artifactsPath, filesName[i])
       );
+
       bytes[] memory rawTxs = abi.decode(vm.parseJson(jsonFile, ".transactions"), (bytes[]));
 
       for (uint256 j; j < rawTxs.length; j++) {
@@ -279,19 +249,87 @@ abstract contract ScriptHelpers is Constants, Script {
       );
   }
 
+  function _getVaultFactory() internal returns (VaultFactory) {
+    return
+      VaultFactory(
+        _getContractAddress(
+          "VaultFactory",
+          _getDeployPath("DeployVault.s.sol"),
+          "vault-factory-not-found"
+        )
+      );
+  }
+
   function _getVault(string memory _tokenSymbol) internal returns (Vault) {
-    return Vault(_getTokenAddress(
-      "Vault",
-      _tokenSymbol,
-      2,
-      _getDeployPath("DeployVault.s.sol"),
-      "vault-not-found"
-    ));
+    string memory _artifactsPath = _getDeployPath("DeployVault.s.sol");
+    string[] memory filesName = _getDeploymentArtifacts(_artifactsPath);
+
+    // Loop through deployment artifacts and find call to VaultFactory's `deployVault` function with `_tokenSymbol` argument
+    for (uint256 i; i < filesName.length; i++) {
+      string memory jsonFile = vm.readFile(
+        string.concat(vm.projectRoot(), _artifactsPath, filesName[i])
+      );
+
+      bytes[] memory rawTxs = abi.decode(vm.parseJson(jsonFile, ".transactions"), (bytes[]));
+
+      for (uint256 j; j < rawTxs.length; j++) {
+        string memory index = vm.toString(j);
+
+        if (
+          _matches(
+            abi.decode(
+              stdJson.parseRaw(
+                jsonFile,
+                string.concat(".transactions[", index, "].transactionType")
+              ),
+              (string)
+            ),
+            "CALL"
+          ) &&
+          _matches(
+            abi.decode(
+              stdJson.parseRaw(jsonFile, string.concat(".transactions[", index, "].contractName")),
+              (string)
+            ),
+            "VaultFactory"
+          ) &&
+          _matches(
+            abi.decode(
+              stdJson.parseRaw(jsonFile, string.concat(".transactions[", index, "].arguments[2]")),
+              (string)
+            ),
+            _tokenSymbol
+          ) &&
+          _matches(
+            abi.decode(
+              stdJson.parseRaw(
+                jsonFile,
+                string.concat(".transactions[", index, "].additionalContracts[0].transactionType")
+              ),
+              (string)
+            ),
+            "CREATE2"
+          )
+        ) {
+          return
+            Vault(
+              abi.decode(
+                stdJson.parseRaw(
+                  jsonFile,
+                  string.concat(".transactions[", index, "].additionalContracts[0].address")
+                ),
+                (address)
+              )
+            );
+        }
+      }
+    }
+
+    revert("vault-not-found");
   }
 
   // Yield Vaults
   // Aave V3
-
   function _getAaveV3Factory() internal returns (AaveV3ERC4626Factory) {
     return
       AaveV3ERC4626Factory(
@@ -303,14 +341,58 @@ abstract contract ScriptHelpers is Constants, Script {
       );
   }
 
-  function _getAaveV3YieldVault(string memory _tokenSymbol) internal returns (ERC4626) {
-    return ERC4626(_getTokenAddress(
-      "AaveV3ERC4626",
-      _tokenSymbol,
-      2,
-      _getDeployPath("DeployAaveV3YieldVault.s.sol"),
-      "yield-vault-not-found"
-    ));
+  function _getAaveV3YieldVault(address _underlyingAsset) internal returns (ERC4626) {
+    string memory _artifactsPath = _getDeployPath("DeployAaveV3YieldVault.s.sol");
+    string[] memory filesName = _getDeploymentArtifacts(_artifactsPath);
+    uint256 filesNameLength = filesName.length;
+
+    // Loop through deployment artifacts and use function signature to find Aave V3 Yield Vault
+    for (uint256 i; i < filesNameLength; i++) {
+      string memory jsonFile = vm.readFile(
+        string.concat(vm.projectRoot(), _artifactsPath, filesName[i])
+      );
+
+      bytes[] memory rawTxs = abi.decode(vm.parseJson(jsonFile, ".transactions"), (bytes[]));
+      uint256 transactionsLength = rawTxs.length;
+
+      for (uint256 j; j < transactionsLength; j++) {
+        if (
+          keccak256(
+            abi.encodePacked(
+              abi.encodeWithSelector(bytes4(keccak256("createERC4626(address)")), _underlyingAsset)
+            )
+          ) ==
+          keccak256(
+            abi.encodePacked(
+              abi.decode(
+                stdJson.parseRaw(
+                  jsonFile,
+                  string.concat(".transactions[", vm.toString(j), "].transaction.data")
+                ),
+                (string)
+              )
+            )
+          )
+        ) {
+          return
+            ERC4626(
+              abi.decode(
+                stdJson.parseRaw(
+                  jsonFile,
+                  string.concat(
+                    ".transactions[",
+                    vm.toString(j),
+                    "].additionalContracts[0].address"
+                  )
+                ),
+                (address)
+              )
+            );
+        }
+      }
+    }
+
+    revert("aave-v3-yield-vault-not-found");
   }
 
   function _getLinkToken() internal view returns (LinkTokenInterface) {
