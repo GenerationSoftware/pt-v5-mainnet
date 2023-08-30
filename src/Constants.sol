@@ -95,7 +95,7 @@ abstract contract Constants {
 
   /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
   function _getAuctionOffset() internal pure returns (uint32) {
-    return uint32(_getFirstDrawStartsAt() - 1 days);
+    return uint32(_getFirstDrawStartsAt() - 3 days);
   }
 
   // Twab

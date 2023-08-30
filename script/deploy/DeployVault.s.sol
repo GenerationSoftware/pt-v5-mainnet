@@ -41,12 +41,13 @@ contract DeployVault is ScriptHelpers {
       address(_getClaimer()),
       address(0), // Yield fee recipient
       YIELD_FEE_PERCENTAGE,
-      EXECUTIVE_TEAM_OPTIMISM_ADDRESS
+      msg.sender
     );
 
     vault = Vault(_vaultAddress);
 
     vault.setLiquidationPair(_createPair(prizePool, vault, _virtualReserveOut));
+    vault.transferOwnership(EXECUTIVE_TEAM_OPTIMISM_ADDRESS);
   }
 
   function _createPair(
