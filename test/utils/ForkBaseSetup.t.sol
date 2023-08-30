@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 import "forge-std/Test.sol";
 import { IERC20, IERC4626 } from "openzeppelin/token/ERC20/extensions/ERC4626.sol";
 import { LinkTokenInterface } from "chainlink/interfaces/LinkTokenInterface.sol";
-import { VRFV2WrapperInterface } from "chainlink/interfaces/VRFV2WrapperInterface.sol";
+import { VRFV2Wrapper } from "chainlink/vrf/VRFV2Wrapper.sol";
 
 import { IRngAuction } from "pt-v5-chainlink-vrf-v2-direct/interfaces/IRngAuction.sol";
 import { ChainlinkVRFV2Direct } from "pt-v5-chainlink-vrf-v2-direct/ChainlinkVRFV2Direct.sol";
@@ -42,7 +42,7 @@ contract ForkBaseSetup is TestHelpers {
   address public constant SPONSORSHIP_ADDRESS = address(1);
 
   LinkTokenInterface public linkToken;
-  VRFV2WrapperInterface public vrfV2Wrapper;
+  VRFV2Wrapper public vrfV2Wrapper;
   ChainlinkVRFV2Direct public rng;
   ChainlinkVRFV2DirectRngAuctionHelper public chainlinkRngAuctionHelper;
   RngAuction public rngAuction;
@@ -97,11 +97,10 @@ contract ForkBaseSetup is TestHelpers {
 
     // TODO: needs to be exported in an L1 script
     linkToken = LinkTokenInterface(address(0x514910771AF9Ca656af840dff83E8264EcF986CA)); // LINK on Ethereum
-    vrfV2Wrapper = VRFV2WrapperInterface(address(0x5A861794B927983406fCE1D062e00b9368d97Df6)); // VRF V2 Wrapper on Ethereum
+    vrfV2Wrapper = VRFV2Wrapper(address(0x5A861794B927983406fCE1D062e00b9368d97Df6)); // VRF V2 Wrapper on Ethereum
 
     rng = new ChainlinkVRFV2Direct(
       address(this), // owner
-      linkToken,
       vrfV2Wrapper,
       CHAINLINK_CALLBACK_GAS_LIMIT,
       CHAINLINK_REQUEST_CONFIRMATIONS
@@ -124,25 +123,25 @@ contract ForkBaseSetup is TestHelpers {
     );
 
     prizePool = new PrizePool(
-      ConstructorParams(
-        prizeToken,
-        twabController,
-        address(0),
-        DRAW_PERIOD_SECONDS,
-        drawStartsAt,
-        sd1x18(0.9e18), // alpha
-        12,
-        uint8(3), // minimum number of tiers
-        100,
-        100
-      )
+      ConstructorParams({
+        prizeToken: prizeToken,
+        twabController: twabController,
+        drawPeriodSeconds: DRAW_PERIOD_SECONDS,
+        firstDrawStartsAt: _getFirstDrawStartsAt(),
+        smoothing: _getContributionsSmoothing(),
+        grandPrizePeriodDraws: GRAND_PRIZE_PERIOD_DRAWS,
+        numberOfTiers: MIN_NUMBER_OF_TIERS,
+        tierShares: TIER_SHARES,
+        reserveShares: RESERVE_SHARES
+      })
     );
 
     rngRelayAuction = new RngRelayAuction(
       prizePool,
       address(rngAuctionRelayerDirect),
       AUCTION_DURATION,
-      AUCTION_TARGET_SALE_TIME
+      AUCTION_TARGET_SALE_TIME,
+      AUCTION_MAX_REWARD
     );
 
     prizePool.setDrawManager(address(rngRelayAuction));
@@ -183,7 +182,7 @@ contract ForkBaseSetup is TestHelpers {
       uint32(drawStartsAt),
       _getTargetFirstSaleTime(DRAW_PERIOD_SECONDS),
       _getDecayConstant(),
-      VIRTUAL_RESERVE_IN,
+      ONE_POOL,
       _virtualReserveOut,
       _virtualReserveOut
     );

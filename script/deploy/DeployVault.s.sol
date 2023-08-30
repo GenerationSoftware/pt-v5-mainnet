@@ -40,7 +40,7 @@ contract DeployVault is ScriptHelpers {
       prizePool,
       address(_getClaimer()),
       address(0), // Yield fee recipient
-      0, // Yield fee percentage
+      YIELD_FEE_PERCENTAGE,
       EXECUTIVE_TEAM_OPTIMISM_ADDRESS
     );
 

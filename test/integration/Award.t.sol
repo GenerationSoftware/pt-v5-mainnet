@@ -6,9 +6,8 @@ import { IERC20 } from "openzeppelin/token/ERC20/IERC20.sol";
 import { ERC20Mock } from "openzeppelin/mocks/ERC20Mock.sol";
 
 import { IntegrationBaseSetup } from "../utils/IntegrationBaseSetup.t.sol";
-import { TestHelpers } from "../utils/TestHelpers.t.sol";
 
-contract AwardIntegrationTest is IntegrationBaseSetup, TestHelpers {
+contract AwardIntegrationTest is IntegrationBaseSetup {
   /* ============ setUp ============ */
   function setUp() public override {
     super.setUp();

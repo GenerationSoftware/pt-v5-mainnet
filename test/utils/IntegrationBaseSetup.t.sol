@@ -19,8 +19,9 @@ import { Vault } from "pt-v5-vault/Vault.sol";
 import { YieldVault } from "pt-v5-vault-mock/YieldVault.sol";
 
 import { Utils } from "./Utils.t.sol";
+import { TestHelpers } from "./TestHelpers.t.sol";
 
-contract IntegrationBaseSetup is Test {
+contract IntegrationBaseSetup is TestHelpers {
   /* ============ Variables ============ */
   Utils internal utils;
 
@@ -74,18 +75,17 @@ contract IntegrationBaseSetup is Test {
     uint64 drawStartsAt = uint64(block.timestamp);
 
     prizePool = new PrizePool(
-      ConstructorParams(
-        prizeToken,
-        twabController,
-        address(0),
-        drawPeriodSeconds, // drawPeriodSeconds
-        drawStartsAt, // drawStartedAt
-        sd1x18(0.9e18), // alpha
-        12,
-        uint8(3), // minimum number of tiers
-        100,
-        100
-      )
+      ConstructorParams({
+        prizeToken: prizeToken,
+        twabController: twabController,
+        drawPeriodSeconds: DRAW_PERIOD_SECONDS,
+        firstDrawStartsAt: _getFirstDrawStartsAt(),
+        smoothing: _getContributionsSmoothing(),
+        grandPrizePeriodDraws: GRAND_PRIZE_PERIOD_DRAWS,
+        numberOfTiers: MIN_NUMBER_OF_TIERS,
+        tierShares: TIER_SHARES,
+        reserveShares: RESERVE_SHARES
+      })
     );
 
     prizePool.setDrawManager(address(this));

@@ -22,7 +22,6 @@ contract DeployL1RngAuction is ScriptHelpers {
 
     ChainlinkVRFV2Direct chainlinkRng = new ChainlinkVRFV2Direct(
       EXECUTIVE_TEAM_ETHEREUM_ADDRESS,
-      _getLinkToken(),
       _getVrfV2Wrapper(),
       CHAINLINK_CALLBACK_GAS_LIMIT,
       CHAINLINK_REQUEST_CONFIRMATIONS

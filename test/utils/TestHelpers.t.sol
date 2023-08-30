@@ -49,9 +49,6 @@ contract TestHelpers is Constants, Test {
     address _user
   ) internal returns (uint256 userPrizeTokenBalanceBeforeSwap, uint256 prizeTokenContributed) {
     uint256 maxPrizeTokenContributed = _liquidationPair.computeExactAmountIn(_yield);
-    uint256 vaultShares = _liquidationPair.estimateAmountOut(prizeTokenContributed);
-    console2.log("prizeTokenContributed", prizeTokenContributed);
-    console2.log("vaultShares", vaultShares);
 
     _prizeToken.approve(address(_liquidationRouter), maxPrizeTokenContributed);
 

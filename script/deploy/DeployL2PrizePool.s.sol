@@ -56,7 +56,8 @@ contract DeployL2PrizePool is ScriptHelpers {
       prizePool,
       address(remoteOwner),
       AUCTION_DURATION,
-      AUCTION_TARGET_SALE_TIME
+      AUCTION_TARGET_SALE_TIME,
+      AUCTION_MAX_REWARD
     );
 
     prizePool.setDrawManager(address(rngRelayAuction));
@@ -65,7 +66,7 @@ contract DeployL2PrizePool is ScriptHelpers {
       prizePool,
       CLAIMER_MIN_FEE,
       CLAIMER_MAX_FEE,
-      DRAW_PERIOD_SECONDS,
+      _getClaimerTimeToReachMaxFee(),
       _getClaimerMaxFeePortionOfPrize()
     );
 

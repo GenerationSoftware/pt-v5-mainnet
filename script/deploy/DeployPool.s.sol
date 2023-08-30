@@ -5,7 +5,6 @@ import "forge-std/console2.sol";
 
 import { Script } from "forge-std/Script.sol";
 
-import { VRFV2WrapperInterface } from "chainlink/interfaces/VRFV2WrapperInterface.sol";
 import { ERC20 } from "openzeppelin/token/ERC20/ERC20.sol";
 import { ud2x18 } from "prb-math/UD2x18.sol";
 import { sd1x18 } from "prb-math/SD1x18.sol";
@@ -41,7 +40,6 @@ contract DeployPool is ScriptHelpers {
 
     ChainlinkVRFV2Direct chainlinkRng = new ChainlinkVRFV2Direct(
       EXECUTIVE_TEAM_ETHEREUM_ADDRESS,
-      _getLinkToken(),
       _getVrfV2Wrapper(),
       CHAINLINK_CALLBACK_GAS_LIMIT,
       CHAINLINK_REQUEST_CONFIRMATIONS
@@ -82,7 +80,8 @@ contract DeployPool is ScriptHelpers {
       prizePool,
       address(rngAuctionRelayerDirect),
       AUCTION_DURATION,
-      AUCTION_TARGET_SALE_TIME
+      AUCTION_TARGET_SALE_TIME,
+      AUCTION_MAX_REWARD
     );
 
     prizePool.setDrawManager(address(rngRelayAuction));
@@ -91,7 +90,7 @@ contract DeployPool is ScriptHelpers {
       prizePool,
       CLAIMER_MIN_FEE,
       CLAIMER_MAX_FEE,
-      DRAW_PERIOD_SECONDS,
+      _getClaimerTimeToReachMaxFee(),
       _getClaimerMaxFeePortionOfPrize()
     );
 

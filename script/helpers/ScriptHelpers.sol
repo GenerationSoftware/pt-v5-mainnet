@@ -5,7 +5,7 @@ import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/StdJson.sol";
 
 import { LinkTokenInterface } from "chainlink/interfaces/LinkTokenInterface.sol";
-import { VRFV2WrapperInterface } from "chainlink/interfaces/VRFV2WrapperInterface.sol";
+import { VRFV2Wrapper } from "chainlink/vrf/VRFV2Wrapper.sol";
 import { ERC4626 } from "openzeppelin/token/ERC20/extensions/ERC4626.sol";
 import { Strings } from "openzeppelin/utils/Strings.sol";
 import { UD2x18, ud2x18 } from "prb-math/UD2x18.sol";
@@ -403,9 +403,9 @@ abstract contract ScriptHelpers is Constants, Script {
     }
   }
 
-  function _getVrfV2Wrapper() internal view returns (VRFV2WrapperInterface) {
+  function _getVrfV2Wrapper() internal view returns (VRFV2Wrapper) {
     if (block.chainid == ETHEREUM_CHAIN_ID) {
-      return VRFV2WrapperInterface(address(0x5A861794B927983406fCE1D062e00b9368d97Df6));
+      return VRFV2Wrapper(address(0x5A861794B927983406fCE1D062e00b9368d97Df6));
     } else {
       revert("VRF V2 Wrapper address not set in `_getVrfV2Wrapper` for this chain.");
     }
