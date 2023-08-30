@@ -50,6 +50,7 @@ contract IntegrationBaseSetup is TestHelpers {
 
   uint256 public winningRandomNumber = 123456;
   uint32 public drawPeriodSeconds = 1 days;
+  uint64 public drawStartsAt;
   TwabController public twabController;
 
   /* ============ setUp ============ */
@@ -72,20 +73,20 @@ contract IntegrationBaseSetup is TestHelpers {
 
     twabController = new TwabController(1 days, uint32(block.timestamp));
 
-    uint64 drawStartsAt = uint64(block.timestamp);
+    drawStartsAt = uint64(block.timestamp);
 
     prizePool = new PrizePool(
-      ConstructorParams({
-        prizeToken: prizeToken,
-        twabController: twabController,
-        drawPeriodSeconds: DRAW_PERIOD_SECONDS,
-        firstDrawStartsAt: _getFirstDrawStartsAt(),
-        smoothing: _getContributionsSmoothing(),
-        grandPrizePeriodDraws: GRAND_PRIZE_PERIOD_DRAWS,
-        numberOfTiers: MIN_NUMBER_OF_TIERS,
-        tierShares: TIER_SHARES,
-        reserveShares: RESERVE_SHARES
-      })
+      ConstructorParams(
+        prizeToken,
+        twabController,
+        drawPeriodSeconds, // drawPeriodSeconds
+        drawStartsAt, // drawStartedAt
+        sd1x18(0.9e18), // alpha
+        12,
+        uint8(3), // minimum number of tiers
+        100,
+        100
+      )
     );
 
     prizePool.setDrawManager(address(this));

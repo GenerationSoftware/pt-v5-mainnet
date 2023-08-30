@@ -25,6 +25,9 @@ contract ClaimIntegrationTest is IntegrationBaseSetup {
 
     vm.stopPrank();
 
+    // second period
+    vm.warp(drawStartsAt + drawPeriodSeconds + drawPeriodSeconds / 8);
+
     _accrueYield(underlyingAsset, yieldVault, _yield);
     prizeToken.mint(alice, 1000e18);
 

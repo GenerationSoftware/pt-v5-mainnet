@@ -3,7 +3,6 @@ pragma solidity 0.8.19;
 
 import "forge-std/Test.sol";
 import { IERC20, IERC4626 } from "openzeppelin/token/ERC20/extensions/ERC4626.sol";
-import { LinkTokenInterface } from "chainlink/interfaces/LinkTokenInterface.sol";
 import { VRFV2Wrapper } from "chainlink/vrf/VRFV2Wrapper.sol";
 
 import { IRngAuction } from "pt-v5-chainlink-vrf-v2-direct/interfaces/IRngAuction.sol";
@@ -41,9 +40,8 @@ contract ForkBaseSetup is TestHelpers {
 
   address public constant SPONSORSHIP_ADDRESS = address(1);
 
-  LinkTokenInterface public linkToken;
   VRFV2Wrapper public vrfV2Wrapper;
-  ChainlinkVRFV2Direct public rng;
+  ChainlinkVRFV2Direct public chainlinkRng;
   ChainlinkVRFV2DirectRngAuctionHelper public chainlinkRngAuctionHelper;
   RngAuction public rngAuction;
   RngAuctionRelayerDirect public rngAuctionRelayerDirect;
@@ -67,6 +65,7 @@ contract ForkBaseSetup is TestHelpers {
   PrizePool public prizePool;
 
   uint256 public winningRandomNumber = 123456;
+  uint32 public drawPeriodSeconds = 1 days;
   TwabController public twabController;
 
   /* ============ setUp ============ */
@@ -90,61 +89,59 @@ contract ForkBaseSetup is TestHelpers {
     prizeTokenAddress = _getToken("POOL"); // POOL token on Optimism
     prizeToken = IERC20(prizeTokenAddress);
 
-    // TODO: which period offset should we use?
     twabController = new TwabController(TWAB_PERIOD_LENGTH, uint32(block.timestamp));
 
     uint64 drawStartsAt = uint64(block.timestamp);
 
-    // TODO: needs to be exported in an L1 script
-    linkToken = LinkTokenInterface(address(0x514910771AF9Ca656af840dff83E8264EcF986CA)); // LINK on Ethereum
-    vrfV2Wrapper = VRFV2Wrapper(address(0x5A861794B927983406fCE1D062e00b9368d97Df6)); // VRF V2 Wrapper on Ethereum
+    // TODO: need to be deployed on L1
+    // vrfV2Wrapper = VRFV2Wrapper(address(0x5A861794B927983406fCE1D062e00b9368d97Df6)); // VRF V2 Wrapper on Ethereum
 
-    rng = new ChainlinkVRFV2Direct(
-      address(this), // owner
-      vrfV2Wrapper,
-      CHAINLINK_CALLBACK_GAS_LIMIT,
-      CHAINLINK_REQUEST_CONFIRMATIONS
-    );
+    // chainlinkRng = new ChainlinkVRFV2Direct(
+    //   address(this), // owner
+    //   vrfV2Wrapper,
+    //   CHAINLINK_CALLBACK_GAS_LIMIT,
+    //   CHAINLINK_REQUEST_CONFIRMATIONS
+    // );
 
-    rngAuction = new RngAuction(
-      RNGInterface(rng),
-      address(this),
-      DRAW_PERIOD_SECONDS,
-      drawStartsAt,
-      AUCTION_DURATION,
-      AUCTION_TARGET_SALE_TIME
-    );
+    // rngAuction = new RngAuction(
+    //   RNGInterface(chainlinkRng),
+    //   address(this),
+    //   DRAW_PERIOD_SECONDS,
+    //   drawStartsAt,
+    //   AUCTION_DURATION,
+    //   AUCTION_TARGET_SALE_TIME
+    // );
 
-    rngAuctionRelayerDirect = new RngAuctionRelayerDirect(rngAuction);
+    // rngAuctionRelayerDirect = new RngAuctionRelayerDirect(rngAuction);
 
-    chainlinkRngAuctionHelper = new ChainlinkVRFV2DirectRngAuctionHelper(
-      rng,
-      IRngAuction(address(rngAuction))
-    );
+    // chainlinkRngAuctionHelper = new ChainlinkVRFV2DirectRngAuctionHelper(
+    //   chainlinkRng,
+    //   IRngAuction(address(rngAuction))
+    // );
 
     prizePool = new PrizePool(
-      ConstructorParams({
-        prizeToken: prizeToken,
-        twabController: twabController,
-        drawPeriodSeconds: DRAW_PERIOD_SECONDS,
-        firstDrawStartsAt: _getFirstDrawStartsAt(),
-        smoothing: _getContributionsSmoothing(),
-        grandPrizePeriodDraws: GRAND_PRIZE_PERIOD_DRAWS,
-        numberOfTiers: MIN_NUMBER_OF_TIERS,
-        tierShares: TIER_SHARES,
-        reserveShares: RESERVE_SHARES
-      })
+      ConstructorParams(
+        prizeToken,
+        twabController,
+        drawPeriodSeconds, // drawPeriodSeconds
+        drawStartsAt, // drawStartedAt
+        sd1x18(0.9e18), // alpha
+        12,
+        uint8(3), // minimum number of tiers
+        100,
+        100
+      )
     );
 
-    rngRelayAuction = new RngRelayAuction(
-      prizePool,
-      address(rngAuctionRelayerDirect),
-      AUCTION_DURATION,
-      AUCTION_TARGET_SALE_TIME,
-      AUCTION_MAX_REWARD
-    );
+    // rngRelayAuction = new RngRelayAuction(
+    //   prizePool,
+    //   address(rngAuctionRelayerDirect),
+    //   AUCTION_DURATION,
+    //   AUCTION_TARGET_SALE_TIME,
+    //   AUCTION_MAX_REWARD
+    // );
 
-    prizePool.setDrawManager(address(rngRelayAuction));
+    // prizePool.setDrawManager(address(rngRelayAuction));
 
     claimer = new Claimer(
       prizePool,
