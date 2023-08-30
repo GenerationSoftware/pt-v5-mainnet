@@ -33,12 +33,14 @@ contract DeployPool is ScriptHelpers {
     vm.startBroadcast();
 
     ERC20 prizeToken = ERC20(_getToken("POOL"));
+
+    // TODO: which period offset should we use?
     TwabController twabController = new TwabController(TWAB_PERIOD_LENGTH, _getAuctionOffset());
 
     console2.log("constructing rng stuff....");
 
     ChainlinkVRFV2Direct chainlinkRng = new ChainlinkVRFV2Direct(
-      address(this), // TODO: who should be owner?
+      EXECUTIVE_TEAM_ETHEREUM_ADDRESS,
       _getLinkToken(),
       _getVrfV2Wrapper(),
       CHAINLINK_CALLBACK_GAS_LIMIT,
@@ -47,7 +49,7 @@ contract DeployPool is ScriptHelpers {
 
     RngAuction rngAuction = new RngAuction(
       RNGInterface(chainlinkRng),
-      address(this), // TODO: who should be owner?
+      EXECUTIVE_TEAM_ETHEREUM_ADDRESS,
       DRAW_PERIOD_SECONDS,
       _getAuctionOffset(),
       AUCTION_DURATION,
@@ -64,7 +66,6 @@ contract DeployPool is ScriptHelpers {
       ConstructorParams({
         prizeToken: prizeToken,
         twabController: twabController,
-        drawManager: msg.sender, // TODO: needs to be removed once we switch to ownable, the setDrawManager function can be used
         drawPeriodSeconds: DRAW_PERIOD_SECONDS,
         firstDrawStartsAt: _getFirstDrawStartsAt(),
         smoothing: _getContributionsSmoothing(),

@@ -39,9 +39,9 @@ contract DeployVault is ScriptHelpers {
       _yieldVault,
       prizePool,
       address(_getClaimer()),
-      msg.sender, // TODO: which address should be yield fee recipient?
-      YIELD_FEE_PERCENTAGE,
-      msg.sender // TODO: which address should be owner?
+      address(0), // Yield fee recipient
+      0, // Yield fee percentage
+      EXECUTIVE_TEAM_OPTIMISM_ADDRESS
     );
 
     vault = Vault(_vaultAddress);

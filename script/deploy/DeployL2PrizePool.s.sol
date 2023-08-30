@@ -24,6 +24,8 @@ contract DeployL2PrizePool is ScriptHelpers {
     vm.startBroadcast();
 
     IERC20 prizeToken = IERC20(_getToken("POOL"));
+
+    // TODO: which period offset should we use?
     TwabController twabController = new TwabController(TWAB_PERIOD_LENGTH, _getAuctionOffset());
 
     console2.log("constructing prize pool....");
@@ -32,7 +34,6 @@ contract DeployL2PrizePool is ScriptHelpers {
       ConstructorParams({
         prizeToken: prizeToken,
         twabController: twabController,
-        drawManager: msg.sender, // TODO: needs to be removed once we switch to ownable, the setDrawManager function can be used
         drawPeriodSeconds: DRAW_PERIOD_SECONDS,
         firstDrawStartsAt: _getFirstDrawStartsAt(),
         smoothing: _getContributionsSmoothing(),
@@ -58,8 +59,7 @@ contract DeployL2PrizePool is ScriptHelpers {
       AUCTION_TARGET_SALE_TIME
     );
 
-    // TODO: uncomment once we switch to ownable
-    // prizePool.setDrawManager(address(rngRelayAuction));
+    prizePool.setDrawManager(address(rngRelayAuction));
 
     new Claimer(
       prizePool,
@@ -72,9 +72,7 @@ contract DeployL2PrizePool is ScriptHelpers {
     LiquidationPairFactory liquidationPairFactory = new LiquidationPairFactory();
     new LiquidationRouter(liquidationPairFactory);
 
-    console2.log("before VaultFactory");
     new VaultFactory();
-    console2.log("after VaultFactory");
 
     vm.stopBroadcast();
   }

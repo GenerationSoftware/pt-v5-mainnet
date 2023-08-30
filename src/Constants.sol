@@ -15,6 +15,9 @@ abstract contract Constants {
   address internal constant ERC5164_EXECUTOR_OPTIMISM = 0x890a87E71E731342a6d10e7628bd1F0733ce3296;
 
   // Multisigs
+  address internal constant EXECUTIVE_TEAM_ETHEREUM_ADDRESS =
+    0xDa63D70332139E6A8eCA7513f4b6E2E0Dc93b693;
+
   address internal constant EXECUTIVE_TEAM_OPTIMISM_ADDRESS =
     0x8d352083F7094dc51Cd7dA8c5C0985AD6e149629;
 
@@ -65,7 +68,7 @@ abstract contract Constants {
 
   // Prize Pool
   uint32 internal constant DRAW_PERIOD_SECONDS = 1 days;
-  uint24 internal constant GRAND_PRIZE_PERIOD_DRAWS = 180; // Every 6 months for daily draws
+  uint24 internal constant GRAND_PRIZE_PERIOD_DRAWS = 365; // Once a year for daily draws
   uint8 internal constant MIN_NUMBER_OF_TIERS = 3;
   uint256 internal constant MIN_TIME_AHEAD = DRAW_PERIOD_SECONDS;
   uint8 internal constant RESERVE_SHARES = 100;
@@ -77,13 +80,7 @@ abstract contract Constants {
 
   /// @notice Returns the start timestamp of the first draw.
   function _getFirstDrawStartsAt() internal view returns (uint64) {
-    uint256 startOfTodayInDays = block.timestamp / 1 days;
-    uint256 startOfTomorrowInSeconds = (startOfTodayInDays + 1) * 1 days;
-
-    if (startOfTomorrowInSeconds - block.timestamp < MIN_TIME_AHEAD) {
-      startOfTomorrowInSeconds += MIN_TIME_AHEAD;
-    }
-    return uint64(startOfTomorrowInSeconds);
+    return uint64(1693594800); // Sep 1, 2023, 7:00:00 PM UTC
   }
 
   // RngAuctions
@@ -92,7 +89,7 @@ abstract contract Constants {
 
   /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
   function _getAuctionOffset() internal view returns (uint32) {
-    return uint32(_getFirstDrawStartsAt() - 10 * DRAW_PERIOD_SECONDS);
+    return uint32(_getFirstDrawStartsAt() - 1 days);
   }
 
   // Twab
