@@ -89,7 +89,7 @@ abstract contract Constants {
 
   // RngAuctions
   uint64 internal constant AUCTION_DURATION = 6 hours;
-  uint64 internal constant AUCTION_TARGET_SALE_TIME = 30 minutes;
+  uint64 internal constant AUCTION_TARGET_SALE_TIME = 1 hours;
   uint256 internal constant AUCTION_MAX_REWARD = 10000e18;
 
   /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
