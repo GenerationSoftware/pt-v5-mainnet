@@ -33,7 +33,7 @@ contract DeployVault is ScriptHelpers {
 
     address _vaultAddress = vaultFactory.deployVault(
       _underlyingAsset,
-      string.concat("PoolTogether ", _underlyingAsset.name(), " Prize Token"),
+      string.concat("PoolTogether Prize ", _underlyingAsset.name(), ""),
       string.concat("PT", _underlyingAsset.symbol(), ""),
       _getTwabController(),
       _yieldVault,
