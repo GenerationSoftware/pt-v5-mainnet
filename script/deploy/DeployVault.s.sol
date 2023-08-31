@@ -28,8 +28,7 @@ contract DeployVault is ScriptHelpers {
 
     PrizePool prizePool = _getPrizePool();
 
-    // TODO: check if VaultFactory has already been deployed
-    VaultFactory vaultFactory = new VaultFactory();
+    VaultFactory vaultFactory = _getVaultFactory();
 
     address _vaultAddress = vaultFactory.deployVault(
       _underlyingAsset,
@@ -39,7 +38,7 @@ contract DeployVault is ScriptHelpers {
       _yieldVault,
       prizePool,
       address(_getClaimer()),
-      address(0), // Yield fee recipient
+      YIELD_FEE_RECIPIENT,
       YIELD_FEE_PERCENTAGE,
       msg.sender
     );

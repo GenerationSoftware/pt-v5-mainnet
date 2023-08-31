@@ -254,61 +254,105 @@ abstract contract ScriptHelpers is Constants, Script {
       VaultFactory(
         _getContractAddress(
           "VaultFactory",
-          _getDeployPath("DeployVault.s.sol"),
+          _getDeployPath(DEPLOY_POOL_SCRIPT),
           "vault-factory-not-found"
         )
       );
   }
 
-  function _getVault(string memory _tokenSymbol) internal returns (Vault) {
+  function _getVault(
+    address _asset,
+    string memory _name,
+    string memory _symbol,
+    TwabController _twabController,
+    ERC4626 _yieldVault,
+    PrizePool _prizePool,
+    address _claimer,
+    address _yieldFeeRecipient,
+    uint256 _yieldFeePercentage,
+    address _owner
+  ) internal returns (Vault) {
     string memory _artifactsPath = _getDeployPath("DeployVault.s.sol");
     string[] memory filesName = _getDeploymentArtifacts(_artifactsPath);
 
-    // Loop through deployment artifacts and find call to VaultFactory's `deployVault` function with `_tokenSymbol` argument
+    // Loop through deployment artifacts and find call to VaultFactory's `deployVault` function
     for (uint256 i; i < filesName.length; i++) {
       string memory jsonFile = vm.readFile(
         string.concat(vm.projectRoot(), _artifactsPath, filesName[i])
       );
 
       bytes[] memory rawTxs = abi.decode(vm.parseJson(jsonFile, ".transactions"), (bytes[]));
+      uint256 transactionsLength = rawTxs.length;
 
-      for (uint256 j; j < rawTxs.length; j++) {
+      for (uint256 j; j < transactionsLength; j++) {
         string memory index = vm.toString(j);
 
         if (
-          _matches(
-            abi.decode(
-              stdJson.parseRaw(
-                jsonFile,
-                string.concat(".transactions[", index, "].transactionType")
-              ),
-              (string)
-            ),
-            "CALL"
-          ) &&
-          _matches(
-            abi.decode(
-              stdJson.parseRaw(jsonFile, string.concat(".transactions[", index, "].contractName")),
-              (string)
-            ),
-            "VaultFactory"
-          ) &&
-          _matches(
-            abi.decode(
-              stdJson.parseRaw(jsonFile, string.concat(".transactions[", index, "].arguments[2]")),
-              (string)
-            ),
-            _tokenSymbol
-          ) &&
-          _matches(
-            abi.decode(
-              stdJson.parseRaw(
-                jsonFile,
-                string.concat(".transactions[", index, "].additionalContracts[0].transactionType")
-              ),
-              (string)
-            ),
-            "CREATE2"
+          // _matches(
+          //   abi.decode(
+          //     stdJson.parseRaw(
+          //       jsonFile,
+          //       string.concat(".transactions[", index, "].transactionType")
+          //     ),
+          //     (string)
+          //   ),
+          //   "CALL"
+          // ) &&
+          // _matches(
+          //   abi.decode(
+          //     stdJson.parseRaw(jsonFile, string.concat(".transactions[", index, "].contractName")),
+          //     (string)
+          //   ),
+          //   "VaultFactory"
+          // ) &&
+          // _matches(
+          //   abi.decode(
+          //     stdJson.parseRaw(jsonFile, string.concat(".transactions[", index, "].arguments[2]")),
+          //     (string)
+          //   ),
+          //   _tokenSymbol
+          // ) &&
+          // _matches(
+          //   abi.decode(
+          //     stdJson.parseRaw(
+          //       jsonFile,
+          //       string.concat(".transactions[", index, "].additionalContracts[0].transactionType")
+          //     ),
+          //     (string)
+          //   ),
+          //   "CREATE2"
+          // )
+          keccak256(
+            abi.encodePacked(
+              abi.encodeWithSelector(
+                bytes4(
+                  keccak256(
+                    "deployVault(address,string,string,address,address,address,address,address,uint256,address)"
+                  )
+                ),
+                _asset,
+                _name,
+                _symbol,
+                address(_twabController),
+                address(_yieldVault),
+                address(_prizePool),
+                _claimer,
+                _yieldFeeRecipient,
+                _yieldFeePercentage,
+                _owner
+              )
+            )
+          ) ==
+          keccak256(
+            abi.encodePacked(
+              abi.decode(
+                stdJson.parseRaw(
+                  jsonFile,
+                  string.concat(".transactions[", vm.toString(j), "].transaction.data")
+                ),
+                (string)
+              )
+            )
           )
         ) {
           return

@@ -5,17 +5,20 @@ import {
   writeList,
 } from "../helpers/generateContractList";
 
-const stableTokenDeploymentPath = `${rootFolder}/broadcast/DeployStableToken.s.sol/31337`;
-const tokenDeploymentPath = `${rootFolder}/broadcast/DeployToken.s.sol/31337`;
-const vaultDeploymentPath = `${rootFolder}/broadcast/DeployVault.s.sol/31337`;
+const vaultDeploymentPath = `${rootFolder}/broadcast/DeployVault.s.sol/10`;
 
-const deploymentPaths = [
-  stableTokenDeploymentPath,
-  tokenDeploymentPath,
-  `${rootFolder}/broadcast/DeployPool.s.sol/31337`,
-  `${rootFolder}/broadcast/DeployYieldVault.s.sol/31337`,
+const mainnetDeploymentPaths = [
+  `${rootFolder}/broadcast/DeployL1RngAuction.s.sol/1`,
+];
+
+const optimismDeploymentPaths = [
+  `${rootFolder}/broadcast/DeployAaveV3Factory.s.sol/10`,
+  `${rootFolder}/broadcast/DeployAaveV3YieldVault.s.sol/10`,
+  `${rootFolder}/broadcast/DeployL2PrizePool.s.sol/10`,
+  `${rootFolder}/broadcast/DeployTwabDelegator.s.sol/10`,
   vaultDeploymentPath,
 ];
 
-writeList(generateContractList(deploymentPaths), "deployments/local", "contracts");
+writeList(generateContractList(mainnetDeploymentPaths), "deployments/local", "ethereum-contracts");
+writeList(generateContractList(optimismDeploymentPaths), "deployments/local", "optimism-contracts");
 writeList(generateVaultList(vaultDeploymentPath), "deployments/local", "vaults");

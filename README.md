@@ -110,6 +110,7 @@ In another terminal window, start Optimism mainnet fork:
 `npm run anvil:optimism:local`
 
 Then run the deploy scripts in a third terminal window:
+
 - `npm run deploy:ethereum-contracts:local`
 - `npm run deploy:optimism-contracts:local`
 

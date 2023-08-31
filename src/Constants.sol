@@ -68,7 +68,7 @@ abstract contract Constants {
    *      Since the data type is SD59x18 and e^134 ~= 1e58, we can divide 134 by the draw period to get the max decay constant.
    */
   function _getDecayConstant() internal pure returns (SD59x18) {
-    return  SD59x18.wrap(0.000030092592592592e18);
+    return SD59x18.wrap(0.000030092592592592e18);
   }
 
   // Prize Pool
@@ -125,6 +125,7 @@ abstract contract Constants {
 
   // Vault
   uint256 internal constant YIELD_FEE_PERCENTAGE = 0; // 0%
+  address internal constant YIELD_FEE_RECIPIENT = address(0);
 
   function _matches(string memory a, string memory b) internal pure returns (bool) {
     return keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b)));

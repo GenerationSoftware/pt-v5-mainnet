@@ -5,31 +5,20 @@ import {
   writeList,
 } from "../helpers/generateContractList";
 
-const ethereumDeploymentPaths = [`${rootFolder}/broadcast/DeployL1RngAuction.s.sol/1`];
-writeList(generateContractList(ethereumDeploymentPaths), "deployments/ethereum", "contracts");
+const vaultDeploymentPath = `${rootFolder}/broadcast/DeployVault.s.sol/10`;
 
-// const ethereumVaultDeploymentPath = `${rootFolder}/broadcast/DeployVault.s.sol/1`;
-
-// const ethereumDeploymentPaths = [
-//   `${rootFolder}/broadcast/DeployPool.s.sol/1`,
-//   `${rootFolder}/broadcast/DeployYieldVault.s.sol/1`,
-//   ethereumVaultDeploymentPath,
-// ];
-
-// writeList(generateContractList(ethereumDeploymentPaths), "deployments/ethereum", "contracts");
-// writeList(
-//   generateVaultList(ethereumVaultDeploymentPath),
-//   "deployments/ethereum",
-//   "vaults"
-// );
-
-const optimismVaultDeploymentPath = `${rootFolder}/broadcast/DeployVault.s.sol/10`;
-
-const optimismDeploymentPaths = [
-  `${rootFolder}/broadcast/DeployL2PrizePool.s.sol/10`,
-  `${rootFolder}/broadcast/DeployYieldVault.s.sol/10`,
-  optimismVaultDeploymentPath,
+const mainnetDeploymentPaths = [
+  `${rootFolder}/broadcast/DeployL1RngAuction.s.sol/1`,
 ];
 
+const optimismDeploymentPaths = [
+  `${rootFolder}/broadcast/DeployAaveV3Factory.s.sol/10`,
+  `${rootFolder}/broadcast/DeployAaveV3YieldVault.s.sol/10`,
+  `${rootFolder}/broadcast/DeployL2PrizePool.s.sol/10`,
+  `${rootFolder}/broadcast/DeployTwabDelegator.s.sol/10`,
+  vaultDeploymentPath,
+];
+
+writeList(generateContractList(mainnetDeploymentPaths), "deployments/ethereum", "contracts");
 writeList(generateContractList(optimismDeploymentPaths), "deployments/optimism", "contracts");
-writeList(generateVaultList(optimismVaultDeploymentPath), "deployments/optimism", "vaults");
+writeList(generateVaultList(vaultDeploymentPath), "deployments/optimism", "vaults");
