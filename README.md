@@ -99,15 +99,20 @@ npm i
 
 ### Local
 
-Start anvil:
+ATTENTION: Since the local deployment is using fork tests, it will store deployment artifacts in the same `./broadcast` folders than the mainnet deployment.
 
-```
-anvil --code-size-limit $LOCAL_CODE_SIZE_LIMIT_BYTES
-```
+Start Ethereum mainnet fork:
 
-In another terminal window, run the following command: `npm run deploy:contracts:local`
+`npm run anvil:ethereum:local`
 
-Then configure the contracts: `npm run deploy:config-contracts:local`
+In another terminal window, start Optimism mainnet fork:
+
+`npm run anvil:optimism:local`
+
+Then run the deploy scripts in a third terminal window:
+
+- `npm run deploy:ethereum-contracts:local`
+- `npm run deploy:optimism-contracts:local`
 
 ### Mainnet
 
@@ -115,15 +120,15 @@ Use one of the following commands to deploy on the testnet of your choice.
 
 #### Ethereum
 
-`npm run deploy:contracts:eth`
+To deploy the Ethereum mainnet contracts, run the following command:
 
-Then configure the contracts: `npm run deploy:config-contracts:eth`
+`npm run deploy:contracts:ethereum`
 
 #### Optimism
 
-`npm run deploy:contracts:optimism`
+To deploy the Optimism mainnet contracts, run the following command:
 
-Then configure the contracts: `npm run deploy:config-contracts:optimism`
+`npm run deploy:contracts:optimism`
 
 ### Contract List
 

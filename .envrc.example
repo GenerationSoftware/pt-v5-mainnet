@@ -6,7 +6,12 @@ export PRIVATE_KEY=""
 
 # Wallet address for local (below is default anvil settings)
 export LOCAL_SENDER="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+export LOCAL_MNEMONIC="test test test test test test test test test test test junk"
 export LOCAL_PRIVATE_KEY="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
+# Ports on which anvil will run
+export LOCAL_L1_PORT="8545"
+export LOCAL_L2_PORT="8546"
 
 export LOCAL_CODE_SIZE_LIMIT_BYTES=30000
 
