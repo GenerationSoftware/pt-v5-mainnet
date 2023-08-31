@@ -15,6 +15,7 @@ pt-v5-liquidator-interfaces/=lib/pt-v5-cgda-liquidator/lib/pt-v5-liquidator-inte
 pt-v5-prize-pool/=lib/pt-v5-prize-pool/src/
 pt-v5-twab-controller/=lib/pt-v5-twab-controller/src/
 pt-v5-vault/=lib/pt-v5-vault/src/
+pt-v5-vault-boost/=lib/pt-v5-vault-boost/src/
 pt-v5-vault-mock/=lib/pt-v5-vault/test/contracts/mock/
 pt-v5-claimer/=lib/pt-v5-claimer/src/
 rng=lib/pt-v5-draw-auction/lib/pt-v5-rng-contracts/contracts/

@@ -13,6 +13,7 @@ import { Claimer } from "pt-v5-claimer/Claimer.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
 import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
 import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
+import { VaultBoosterFactory } from "pt-v5-vault-boost/VaultBoosterFactory.sol";
 
 import { RemoteOwner } from "remote-owner/RemoteOwner.sol";
 import { RngRelayAuction } from "pt-v5-draw-auction/RngRelayAuction.sol";
@@ -74,6 +75,7 @@ contract DeployL2PrizePool is ScriptHelpers {
     new LiquidationRouter(liquidationPairFactory);
 
     new VaultFactory();
+    new VaultBoosterFactory();
 
     vm.stopBroadcast();
   }

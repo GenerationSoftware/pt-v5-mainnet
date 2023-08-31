@@ -51,3 +51,6 @@
 	path = lib/pt-v5-twab-delegator
 	url = https://github.com/generationsoftware/pt-v5-twab-delegator
 	branch = prod-deploy-1
+[submodule "lib/pt-v5-vault-boost"]
+	path = lib/pt-v5-vault-boost
+	url = https://github.com/generationsoftware/pt-v5-vault-boost
