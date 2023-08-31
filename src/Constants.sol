@@ -44,7 +44,6 @@ abstract contract Constants {
 
   // Liquidation Pair
   uint104 internal constant ONE_POOL = 1e18;
-  uint104 internal constant VIRTUAL_RESERVE_IN = 10e18;
 
   /**
    * @notice Get exchange rate for liquidation pair `virtualReserveOut`.

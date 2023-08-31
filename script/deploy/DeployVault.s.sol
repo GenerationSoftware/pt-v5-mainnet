@@ -22,7 +22,8 @@ import { ScriptHelpers } from "../helpers/ScriptHelpers.sol";
 contract DeployVault is ScriptHelpers {
   function _deployVault(
     IERC4626 _yieldVault,
-    uint104 _virtualReserveOut
+    uint104 _exchangeRateAssetsPerPool,
+    uint104 _minAuctionSize
   ) internal returns (Vault vault) {
     ERC20 _underlyingAsset = ERC20(_yieldVault.asset());
 
@@ -45,14 +46,14 @@ contract DeployVault is ScriptHelpers {
 
     vault = Vault(_vaultAddress);
 
-    vault.setLiquidationPair(_createPair(prizePool, vault, _virtualReserveOut));
-    vault.transferOwnership(EXECUTIVE_TEAM_OPTIMISM_ADDRESS);
+    vault.setLiquidationPair(_createPair(prizePool, vault, _exchangeRateAssetsPerPool));
   }
 
   function _createPair(
     PrizePool _prizePool,
     Vault _vault,
-    uint104 _virtualReserveOut
+    uint104 _exchangeRateAssetsPerPool,
+    uint104 _minAuctionSize
   ) internal returns (LiquidationPair pair) {
     uint32 _drawPeriodSeconds = _prizePool.drawPeriodSeconds();
 
@@ -64,9 +65,9 @@ contract DeployVault is ScriptHelpers {
       uint32(_prizePool.firstDrawStartsAt()),
       _getTargetFirstSaleTime(_drawPeriodSeconds),
       _getDecayConstant(),
-      VIRTUAL_RESERVE_IN,
-      _virtualReserveOut,
-      _virtualReserveOut
+      1e18, // 1 POOL
+      _exchangeRateAssetsPerPool,
+      _minAuctionSize
     );
   }
 
@@ -74,10 +75,15 @@ contract DeployVault is ScriptHelpers {
     vm.startBroadcast();
 
     /* USDC */
-    _deployVault(_getAaveV3YieldVault(OPTIMISM_USDC_ADDRESS), _getExchangeRate(USDC_PRICE, 12));
+    _deployVault(_getAaveV3YieldVault(OPTIMISM_USDC_ADDRESS), 0.56e6, 4e6);
+
+    // POOL / USDC = 0.56
+    // WETH / USDC = 1702
+    // WETH / POOL = 1702 / 0.56 = 3039
+    // => 1 POOL = 1 / 3039 WETH
 
     /* wETH */
-    _deployVault(_getAaveV3YieldVault(OPTIMISM_WETH_ADDRESS), _getExchangeRate(ETH_PRICE, 0));
+    _deployVault(_getAaveV3YieldVault(OPTIMISM_WETH_ADDRESS), 0.000329055610398157e18, 0.000329055610398157e18*8 );
 
     vm.stopBroadcast();
   }
