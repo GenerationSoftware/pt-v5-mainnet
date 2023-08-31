@@ -272,6 +272,29 @@ abstract contract ScriptHelpers is Constants, Script {
     uint256 _yieldFeePercentage,
     address _owner
   ) internal returns (Vault) {
+    bytes memory selector = abi.encodeWithSelector(
+      bytes4(
+        keccak256(
+          "deployVault(address,string,string,address,address,address,address,address,uint256,address)"
+        )
+      ),
+      _asset,
+      _name,
+      _symbol,
+      address(_twabController),
+      address(_yieldVault),
+      address(_prizePool),
+      _claimer,
+      _yieldFeeRecipient,
+      _yieldFeePercentage,
+      _owner
+    );
+    return _getVault(selector);
+  }
+
+  function _getVault(
+    bytes memory selector
+  ) internal returns (Vault) {
     string memory _artifactsPath = _getDeployPath("DeployVault.s.sol");
     string[] memory filesName = _getDeploymentArtifacts(_artifactsPath);
 
@@ -282,9 +305,8 @@ abstract contract ScriptHelpers is Constants, Script {
       );
 
       bytes[] memory rawTxs = abi.decode(vm.parseJson(jsonFile, ".transactions"), (bytes[]));
-      uint256 transactionsLength = rawTxs.length;
 
-      for (uint256 j; j < transactionsLength; j++) {
+      for (uint256 j; j < rawTxs.length; j++) {
         string memory index = vm.toString(j);
 
         if (
@@ -324,23 +346,7 @@ abstract contract ScriptHelpers is Constants, Script {
           // )
           keccak256(
             abi.encodePacked(
-              abi.encodeWithSelector(
-                bytes4(
-                  keccak256(
-                    "deployVault(address,string,string,address,address,address,address,address,uint256,address)"
-                  )
-                ),
-                _asset,
-                _name,
-                _symbol,
-                address(_twabController),
-                address(_yieldVault),
-                address(_prizePool),
-                _claimer,
-                _yieldFeeRecipient,
-                _yieldFeePercentage,
-                _owner
-              )
+              selector
             )
           ) ==
           keccak256(

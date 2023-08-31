@@ -46,7 +46,7 @@ contract DeployVault is ScriptHelpers {
 
     vault = Vault(_vaultAddress);
 
-    vault.setLiquidationPair(_createPair(prizePool, vault, _exchangeRateAssetsPerPool));
+    vault.setLiquidationPair(_createPair(prizePool, vault, _exchangeRateAssetsPerPool, _minAuctionSize));
   }
 
   function _createPair(
