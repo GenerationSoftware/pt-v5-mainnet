@@ -1,28 +1,42 @@
 {
-    "name": "PoolTogether Mainnet Vault List",
-    "keywords": [
-        "pooltogether"
-    ],
-    "version": {
-        "major": 0,
-        "minor": 1,
-        "patch": 0
-    },
-    "timestamp": "2023-08-31T03:56:36.960Z",
-    "tokens": [
-        {
-            "chainId": 10,
-            "address": "0x31515cfC4550d9C83E2d86E8a352886d1364E2D9",
-            "extensions": {
-                "underlyingAsset": {}
-            }
-        },
-        {
-            "chainId": 10,
-            "address": "0x1732Ce5486ea47f607550Ccbe499cd0f894E0494",
-            "extensions": {
-                "underlyingAsset": {}
-            }
+  "name": "PoolTogether Mainnet Vault List",
+  "keywords": [
+    "pooltogether"
+  ],
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  },
+  "timestamp": "2023-08-31T19:39:42.463Z",
+  "tokens": [
+    {
+      "chainId": 10,
+      "address": "0x31515cfC4550d9C83E2d86E8a352886d1364E2D9",
+      "name": "PoolTogether Prize USD Coin",
+      "decimals": 6,
+      "symbol": "PTUSDC",
+      "extensions": {
+        "underlyingAsset": {
+          "address": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
+          "symbol": "USDC",
+          "name": "USD Coin"
         }
-    ]
+      }
+    },
+    {
+      "chainId": 10,
+      "address": "0x1732Ce5486ea47f607550Ccbe499cd0f894E0494",
+      "name": "PoolTogether Prize Wrapped Ether",
+      "decimals": 18,
+      "symbol": "PTWETH",
+      "extensions": {
+        "underlyingAsset": {
+          "address": "0x4200000000000000000000000000000000000006",
+          "symbol": "WETH",
+          "name": "Wrapped Ether"
+        }
+      }
+    }
+  ]
 }

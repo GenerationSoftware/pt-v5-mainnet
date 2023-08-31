@@ -14,8 +14,8 @@ contract DeployTwabDelegator is ScriptHelpers {
     ERC20 _underlyingAsset = ERC20(_vault.asset());
 
     new TwabDelegator(
-      string.concat("PoolTogether Staked Prize ", _underlyingAsset.name(), ""),
-      string.concat("stkPT", _underlyingAsset.symbol(), ""),
+      string.concat("PoolTogether Staked Prize ", _underlyingAsset.name()),
+      string.concat("stkPT", _underlyingAsset.symbol()),
       _twabController,
       _vault
     );
@@ -31,8 +31,8 @@ contract DeployTwabDelegator is ScriptHelpers {
       _twabController,
       _getVault(
         OPTIMISM_USDC_ADDRESS,
-        "PoolTogether Prize USD Coin",
-        "PTUSDC",
+        PT_USDC_NAME,
+        PT_USDC_SYMBOL,
         _twabController,
         _getAaveV3YieldVault(OPTIMISM_USDC_ADDRESS),
         _prizePool,
@@ -48,8 +48,8 @@ contract DeployTwabDelegator is ScriptHelpers {
       _twabController,
       _getVault(
         OPTIMISM_WETH_ADDRESS,
-        "PoolTogether Prize Wrapped Ether",
-        "PTWETH",
+        PT_WETH_NAME,
+        PT_WETH_SYMBOL,
         _twabController,
         _getAaveV3YieldVault(OPTIMISM_WETH_ADDRESS),
         _prizePool,

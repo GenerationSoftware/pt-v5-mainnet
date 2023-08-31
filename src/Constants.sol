@@ -104,7 +104,7 @@ abstract contract Constants {
   // Timestamps
   uint256 internal constant ONE_YEAR_IN_SECONDS = 31557600;
 
-  // Tokens addresses
+  // Token addresses
   address internal constant ETHEREUM_POOL_ADDRESS = 0x0cEC1A9154Ff802e7934Fc916Ed7Ca50bDE6844e;
   address internal constant ETHEREUM_USDC_ADDRESS = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
   address internal constant ETHEREUM_WETH_ADDRESS = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
@@ -113,9 +113,20 @@ abstract contract Constants {
   address internal constant OPTIMISM_USDC_ADDRESS = 0x7F5c764cBc14f9669B88837ca1490cCa17c31607;
   address internal constant OPTIMISM_WETH_ADDRESS = 0x4200000000000000000000000000000000000006;
 
-  // Tokens decimals
+  // Token decimals
   uint8 internal constant DEFAULT_TOKEN_DECIMAL = 18;
   uint8 internal constant USDC_TOKEN_DECIMAL = 6;
+
+  // Token names and symbols
+  string internal constant POOL_SYMBOL = "POOL";
+  string internal constant USDC_SYMBOL = "USDC";
+  string internal constant WETH_SYMBOL = "WETH";
+
+  string internal constant PT_USDC_NAME = "PoolTogether Prize USD Coin";
+  string internal constant PT_USDC_SYMBOL = "PTUSDC";
+
+  string internal constant PT_WETH_NAME = "PoolTogether Prize Wrapped Ether";
+  string internal constant PT_WETH_SYMBOL = "PTWETH";
 
   // Token prices
   uint256 internal constant USDC_PRICE = 100000000;
@@ -134,27 +145,27 @@ abstract contract Constants {
     address _tokenAddress;
 
     if (block.chainid == ETHEREUM_CHAIN_ID) {
-      if (_matches(_tokenSymbol, "POOL")) {
+      if (_matches(_tokenSymbol, POOL_SYMBOL)) {
         _tokenAddress = ETHEREUM_POOL_ADDRESS;
       }
 
-      if (_matches(_tokenSymbol, "USDC")) {
+      if (_matches(_tokenSymbol, USDC_SYMBOL)) {
         _tokenAddress = ETHEREUM_USDC_ADDRESS;
       }
 
-      if (_matches(_tokenSymbol, "WETH")) {
+      if (_matches(_tokenSymbol, WETH_SYMBOL)) {
         _tokenAddress = ETHEREUM_WETH_ADDRESS;
       }
     } else if (block.chainid == OPTIMISM_CHAIN_ID) {
-      if (_matches(_tokenSymbol, "POOL")) {
+      if (_matches(_tokenSymbol, POOL_SYMBOL)) {
         _tokenAddress = OPTIMISM_POOL_ADDRESS;
       }
 
-      if (_matches(_tokenSymbol, "USDC")) {
+      if (_matches(_tokenSymbol, USDC_SYMBOL)) {
         _tokenAddress = OPTIMISM_USDC_ADDRESS;
       }
 
-      if (_matches(_tokenSymbol, "WETH")) {
+      if (_matches(_tokenSymbol, WETH_SYMBOL)) {
         _tokenAddress = OPTIMISM_WETH_ADDRESS;
       }
     }
