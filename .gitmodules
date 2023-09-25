@@ -22,31 +22,31 @@
 [submodule "lib/pt-v5-draw-auction"]
 	path = lib/pt-v5-draw-auction
 	url = https://github.com/generationsoftware/pt-v5-draw-auction
-	branch = prod-deploy-1
+	branch = main
 [submodule "lib/pt-v5-prize-pool"]
 	path = lib/pt-v5-prize-pool
 	url = https://github.com/generationsoftware/pt-v5-prize-pool
-	branch = prod-deploy-1
+	branch = main
 [submodule "lib/pt-v5-vault"]
 	path = lib/pt-v5-vault
 	url = https://github.com/generationsoftware/pt-v5-vault
-	branch = prod-deploy-1
+	branch = main
 [submodule "lib/pt-v5-cgda-liquidator"]
 	path = lib/pt-v5-cgda-liquidator
 	url = https://github.com/generationsoftware/pt-v5-cgda-liquidator
-	branch = prod-deploy-1
+	branch = main
 [submodule "lib/pt-v5-claimer"]
 	path = lib/pt-v5-claimer
 	url = https://github.com/generationsoftware/pt-v5-claimer
-	branch = prod-deploy-1
+	branch = main
 [submodule "lib/pt-v5-chainlink-vrf-v2-direct"]
 	path = lib/pt-v5-chainlink-vrf-v2-direct
 	url = https://github.com/generationsoftware/pt-v5-chainlink-vrf-v2-direct
-	branch = prod-deploy-1
+	branch = main
 [submodule "lib/pt-v5-twab-controller"]
 	path = lib/pt-v5-twab-controller
 	url = https://github.com/generationsoftware/pt-v5-twab-controller
-	branch = prod-deploy-1
+	branch = main
 [submodule "lib/pt-v5-twab-delegator"]
 	path = lib/pt-v5-twab-delegator
 	url = https://github.com/generationsoftware/pt-v5-twab-delegator
@@ -54,3 +54,4 @@
 [submodule "lib/pt-v5-vault-boost"]
 	path = lib/pt-v5-vault-boost
 	url = https://github.com/generationsoftware/pt-v5-vault-boost
+	branch = main
