@@ -11,6 +11,7 @@ import { sd1x18 } from "prb-math/SD1x18.sol";
 import { convert } from "prb-math/SD59x18.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
 import { Claimer } from "pt-v5-claimer/Claimer.sol";
+import { ClaimerFactory } from "pt-v5-claimer/ClaimerFactory.sol";
 import { ILiquidationSource } from "pt-v5-liquidator-interfaces/ILiquidationSource.sol";
 import { LiquidationPair } from "pt-v5-cgda-liquidator/LiquidationPair.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
@@ -91,7 +92,8 @@ contract IntegrationBaseSetup is TestHelpers {
 
     prizePool.setDrawManager(address(this));
 
-    claimer = new Claimer(prizePool, 0.0001e18, 1000e18, drawPeriodSeconds, ud2x18(0.5e18));
+    ClaimerFactory claimerFactory = new ClaimerFactory();
+    claimer = claimerFactory.createClaimer(prizePool, 0.0001e18, 1000e18, drawPeriodSeconds, ud2x18(0.5e18));
 
     yieldVault = new YieldVault(
       address(underlyingAsset),

@@ -9,7 +9,7 @@ import { IERC20 } from "openzeppelin/interfaces/IERC20.sol";
 
 import { PrizePool, ConstructorParams } from "pt-v5-prize-pool/PrizePool.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
-import { Claimer } from "pt-v5-claimer/Claimer.sol";
+import { ClaimerFactory } from "pt-v5-claimer/ClaimerFactory.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
 import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
 import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
@@ -63,7 +63,8 @@ contract DeployL2PrizePool is ScriptHelpers {
 
     prizePool.setDrawManager(address(rngRelayAuction));
 
-    new Claimer(
+    ClaimerFactory claimerFactory = new ClaimerFactory();
+    claimerFactory.createClaimer(
       prizePool,
       CLAIMER_MIN_FEE,
       CLAIMER_MAX_FEE,

@@ -18,6 +18,7 @@ import { PrizePool, ConstructorParams } from "pt-v5-prize-pool/PrizePool.sol";
 import { sd1x18 } from "prb-math/SD1x18.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
 import { Claimer } from "pt-v5-claimer/Claimer.sol";
+import { ClaimerFactory } from "pt-v5-claimer/ClaimerFactory.sol";
 import { ILiquidationSource } from "pt-v5-liquidator-interfaces/ILiquidationSource.sol";
 import { LiquidationPair } from "pt-v5-cgda-liquidator/LiquidationPair.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
@@ -143,7 +144,8 @@ contract ForkBaseSetup is TestHelpers {
 
     // prizePool.setDrawManager(address(rngRelayAuction));
 
-    claimer = new Claimer(
+    ClaimerFactory claimerFactory = new ClaimerFactory();
+    claimer = claimerFactory.createClaimer(
       prizePool,
       CLAIMER_MIN_FEE,
       CLAIMER_MAX_FEE,
