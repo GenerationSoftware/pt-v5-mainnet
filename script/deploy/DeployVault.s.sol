@@ -35,7 +35,6 @@ contract DeployVault is ScriptHelpers {
       _underlyingAsset,
       string.concat("PoolTogether Prize ", _underlyingAsset.name()),
       string.concat("PT", _underlyingAsset.symbol()),
-      _getTwabController(),
       _yieldVault,
       prizePool,
       address(_getClaimer()),

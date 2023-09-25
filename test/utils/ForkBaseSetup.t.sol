@@ -91,7 +91,7 @@ contract ForkBaseSetup is TestHelpers {
 
     twabController = new TwabController(TWAB_PERIOD_LENGTH, uint32(block.timestamp));
 
-    uint64 drawStartsAt = uint64(block.timestamp);
+    uint48 drawStartsAt = uint48(block.timestamp);
 
     // TODO: need to be deployed on L1
     // vrfV2Wrapper = VRFV2Wrapper(address(0x5A861794B927983406fCE1D062e00b9368d97Df6)); // VRF V2 Wrapper on Ethereum
@@ -155,7 +155,6 @@ contract ForkBaseSetup is TestHelpers {
       underlyingAsset,
       vaultName,
       vaultSymbol,
-      twabController,
       _yieldVault,
       prizePool,
       address(claimer),
