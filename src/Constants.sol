@@ -83,8 +83,8 @@ abstract contract Constants {
   }
 
   /// @notice Returns the start timestamp of the first draw.
-  function _getFirstDrawStartsAt() internal pure returns (uint64) {
-    return uint64(1693594800); // Sep 1, 2023, 7:00:00 PM UTC
+  function _getFirstDrawStartsAt() internal pure returns (uint48) {
+    return uint48(1693594800); // Sep 1, 2023, 7:00:00 PM UTC
   }
 
   // RngAuctions
@@ -134,7 +134,7 @@ abstract contract Constants {
   uint256 internal constant PRIZE_TOKEN_PRICE = 0.562709e18;
 
   // Vault
-  uint256 internal constant YIELD_FEE_PERCENTAGE = 0; // 0%
+  uint32 internal constant YIELD_FEE_PERCENTAGE = 0; // 0%
   address internal constant YIELD_FEE_RECIPIENT = address(0);
 
   function _matches(string memory a, string memory b) internal pure returns (bool) {

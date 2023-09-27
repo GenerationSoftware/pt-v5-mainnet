@@ -7,7 +7,7 @@ solc = "0.8.19"
 fs_permissions = [{ access = "read", path = "./broadcast"}]
 gas_reports = ["*"]
 optimizer = true
-via_ir = true
+via_ir = false
 ffi = true
 
 [profile.default.optimizer_details]

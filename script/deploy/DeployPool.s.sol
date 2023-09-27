@@ -12,7 +12,7 @@ import { sd1x18 } from "prb-math/SD1x18.sol";
 import { ChainlinkVRFV2Direct } from "pt-v5-chainlink-vrf-v2-direct/ChainlinkVRFV2Direct.sol";
 import { ChainlinkVRFV2DirectRngAuctionHelper } from "pt-v5-chainlink-vrf-v2-direct/ChainlinkVRFV2DirectRngAuctionHelper.sol";
 import { IRngAuction } from "pt-v5-chainlink-vrf-v2-direct/interfaces/IRngAuction.sol";
-import { Claimer } from "pt-v5-claimer/Claimer.sol";
+import { ClaimerFactory } from "pt-v5-claimer/ClaimerFactory.sol";
 import { ILiquidationSource } from "pt-v5-liquidator-interfaces/ILiquidationSource.sol";
 import { LiquidationPair } from "pt-v5-cgda-liquidator/LiquidationPair.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
@@ -86,7 +86,8 @@ contract DeployPool is ScriptHelpers {
 
     prizePool.setDrawManager(address(rngRelayAuction));
 
-    new Claimer(
+    ClaimerFactory claimerFactory = new ClaimerFactory();
+    claimerFactory.createClaimer(
       prizePool,
       CLAIMER_MIN_FEE,
       CLAIMER_MAX_FEE,
