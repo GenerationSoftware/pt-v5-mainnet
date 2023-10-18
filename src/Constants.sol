@@ -93,7 +93,7 @@ abstract contract Constants {
   // RngAuctions
   uint64 internal constant AUCTION_DURATION = 6 hours;
   uint64 internal constant AUCTION_TARGET_SALE_TIME = 1 hours;
-  uint256 internal constant AUCTION_MAX_REWARD = 10000e18;
+  uint256 internal constant AUCTION_MAX_REWARD = 500e18;
   UD2x18 internal constant FIRST_RNG_AUCTION_TARGET_REWARD_FRACTION = UD2x18.wrap(uint64(0.24e18));
   UD2x18 internal constant FIRST_RNG_RELAY_AUCTION_TARGET_REWARD_FRACTION =
     UD2x18.wrap(uint64(0.132e18));
