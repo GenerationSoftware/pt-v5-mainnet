@@ -83,7 +83,7 @@ abstract contract Constants {
   }
 
   /// @notice Returns the start timestamp of the first draw.
-  function _getFirstDrawStartsAt() internal pure returns (uint48) {
+  function _getFirstDrawOpensAt() internal pure returns (uint48) {
     return uint48(1697767200); // Oct 20, 2023, 2:00:00 AM
   }
 
@@ -91,10 +91,11 @@ abstract contract Constants {
   uint64 internal constant AUCTION_DURATION = 6 hours;
   uint64 internal constant AUCTION_TARGET_SALE_TIME = 1 hours;
   uint256 internal constant AUCTION_MAX_REWARD = 10000e18;
+  UD2x18 internal constant FIRST_AUCTION_TARGET_REWARD_FRACTION = UD2x18.wrap(uint64(0)); // TODO: needs to be updated
 
   /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
   function _getAuctionOffset() internal pure returns (uint32) {
-    return uint32(_getFirstDrawStartsAt() - 3 days);
+    return uint32(_getFirstDrawOpensAt() - 3 days);
   }
 
   // Twab

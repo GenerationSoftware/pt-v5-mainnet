@@ -57,21 +57,23 @@ contract DeployVault is ScriptHelpers {
     Vault _vault,
     uint104 _exchangeRateAssetsPerPool,
     uint104 _minAuctionSize
-  ) internal returns (LiquidationPair pair) {
-    uint32 _drawPeriodSeconds = _prizePool.drawPeriodSeconds();
+  ) internal returns (address) {
+    uint48 _drawPeriodSeconds = _prizePool.drawPeriodSeconds();
 
-    pair = _getLiquidationPairFactory().createPair(
+    LiquidationPair pair = _getLiquidationPairFactory().createPair(
       ILiquidationSource(_vault),
       address(_getToken("POOL")),
       address(_vault),
-      _drawPeriodSeconds,
-      uint32(_prizePool.firstDrawStartsAt()),
-      _getTargetFirstSaleTime(_drawPeriodSeconds),
+      uint32(_drawPeriodSeconds),
+      uint32(_prizePool.firstDrawOpensAt()),
+      _getTargetFirstSaleTime(uint32(_drawPeriodSeconds)),
       _getDecayConstant(),
       1e18, // 1 POOL
       _exchangeRateAssetsPerPool,
       _minAuctionSize
     );
+
+    return address(pair);
   }
 
   function run() public {

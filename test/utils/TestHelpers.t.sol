@@ -65,8 +65,8 @@ contract TestHelpers is Constants, Test {
 
   /* ============ Award ============ */
   function _award(PrizePool _prizePool, uint256 _winningRandomNumber) internal {
-    vm.warp(_prizePool.openDrawStartedAt() + _prizePool.drawPeriodSeconds());
-    _prizePool.closeDraw(_winningRandomNumber);
+    vm.warp(_prizePool.drawOpensAt(_prizePool.getOpenDrawId()) + _prizePool.drawPeriodSeconds());
+    _prizePool.awardDraw(_winningRandomNumber);
   }
 
   /* ============ Claim ============ */
@@ -78,12 +78,12 @@ contract TestHelpers is Constants, Test {
     uint32[] memory _userPrizeIndices,
     uint8[] memory _tiers
   ) internal returns (uint256) {
-    uint32 _drawPeriodSeconds = _prizePool.drawPeriodSeconds();
+    uint48 _drawPeriodSeconds = _prizePool.drawPeriodSeconds();
 
     vm.warp(
       _drawPeriodSeconds /
         _prizePool.estimatedPrizeCount() +
-        _prizePool.lastClosedDrawStartedAt() +
+        _prizePool.drawOpensAt(_prizePool.getLastAwardedDrawId()) +
         _drawPeriodSeconds +
         10
     );

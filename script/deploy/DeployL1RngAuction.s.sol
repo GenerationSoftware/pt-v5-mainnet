@@ -33,7 +33,8 @@ contract DeployL1RngAuction is ScriptHelpers {
       DRAW_PERIOD_SECONDS,
       _getAuctionOffset(),
       AUCTION_DURATION,
-      AUCTION_TARGET_SALE_TIME
+      AUCTION_TARGET_SALE_TIME,
+      FIRST_AUCTION_TARGET_REWARD_FRACTION
     );
 
     new ChainlinkVRFV2DirectRngAuctionHelper(chainlinkRng, IRngAuction(address(rngAuction)));

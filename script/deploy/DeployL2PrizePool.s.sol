@@ -35,7 +35,7 @@ contract DeployL2PrizePool is ScriptHelpers {
         prizeToken: prizeToken,
         twabController: twabController,
         drawPeriodSeconds: DRAW_PERIOD_SECONDS,
-        firstDrawStartsAt: _getFirstDrawStartsAt(),
+        firstDrawOpensAt: _getFirstDrawOpensAt(),
         smoothing: _getContributionsSmoothing(),
         grandPrizePeriodDraws: GRAND_PRIZE_PERIOD_DRAWS,
         numberOfTiers: MIN_NUMBER_OF_TIERS,
@@ -54,9 +54,10 @@ contract DeployL2PrizePool is ScriptHelpers {
 
     RngRelayAuction rngRelayAuction = new RngRelayAuction(
       prizePool,
-      address(remoteOwner),
       AUCTION_DURATION,
       AUCTION_TARGET_SALE_TIME,
+      address(remoteOwner),
+      FIRST_AUCTION_TARGET_REWARD_FRACTION,
       AUCTION_MAX_REWARD
     );
 
