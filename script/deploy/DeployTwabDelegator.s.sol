@@ -39,13 +39,12 @@ contract DeployTwabDelegator is ScriptHelpers {
         OPTIMISM_USDC_ADDRESS,
         PT_USDC_NAME,
         PT_USDC_SYMBOL,
-        _twabController,
         _getAaveV3YieldVault(OPTIMISM_USDC_ADDRESS),
         _prizePool,
         _claimer,
         YIELD_FEE_RECIPIENT,
         YIELD_FEE_PERCENTAGE,
-        G9_TEAM_OPTIMISM_ADDRESS
+        msg.sender
       )
     );
 
@@ -58,13 +57,12 @@ contract DeployTwabDelegator is ScriptHelpers {
         OPTIMISM_WETH_ADDRESS,
         PT_WETH_NAME,
         PT_WETH_SYMBOL,
-        _twabController,
         _getAaveV3YieldVault(OPTIMISM_WETH_ADDRESS),
         _prizePool,
         _claimer,
         YIELD_FEE_RECIPIENT,
         YIELD_FEE_PERCENTAGE,
-        G9_TEAM_OPTIMISM_ADDRESS
+        msg.sender
       )
     );
   }

@@ -42,7 +42,7 @@ contract DeployVault is ScriptHelpers {
       address(_getClaimer()),
       YIELD_FEE_RECIPIENT,
       YIELD_FEE_PERCENTAGE,
-      G9_TEAM_OPTIMISM_ADDRESS
+      msg.sender // Need to keep ownership to set the LiquidationPair
     );
 
     vault = Vault(_vaultAddress);
