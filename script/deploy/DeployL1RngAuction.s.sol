@@ -21,7 +21,7 @@ contract DeployL1RngAuction is ScriptHelpers {
     console2.log("constructing rng stuff....");
 
     ChainlinkVRFV2Direct chainlinkRng = new ChainlinkVRFV2Direct(
-      EXECUTIVE_TEAM_ETHEREUM_ADDRESS,
+      G9_TEAM_ETHEREUM_ADDRESS,
       _getVrfV2Wrapper(),
       CHAINLINK_CALLBACK_GAS_LIMIT,
       CHAINLINK_REQUEST_CONFIRMATIONS
@@ -29,7 +29,7 @@ contract DeployL1RngAuction is ScriptHelpers {
 
     RngAuction rngAuction = new RngAuction(
       RNGInterface(chainlinkRng),
-      EXECUTIVE_TEAM_ETHEREUM_ADDRESS,
+      G9_TEAM_ETHEREUM_ADDRESS,
       DRAW_PERIOD_SECONDS,
       _getAuctionOffset(),
       AUCTION_DURATION,

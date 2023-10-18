@@ -42,7 +42,7 @@ contract DeployVault is ScriptHelpers {
       address(_getClaimer()),
       YIELD_FEE_RECIPIENT,
       YIELD_FEE_PERCENTAGE,
-      msg.sender // TODO: G9 safe
+      G9_TEAM_OPTIMISM_ADDRESS
     );
 
     vault = Vault(_vaultAddress);

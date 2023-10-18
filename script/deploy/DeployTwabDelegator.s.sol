@@ -45,7 +45,7 @@ contract DeployTwabDelegator is ScriptHelpers {
         _claimer,
         YIELD_FEE_RECIPIENT,
         YIELD_FEE_PERCENTAGE,
-        msg.sender // TODO: may change
+        G9_TEAM_OPTIMISM_ADDRESS
       )
     );
 
@@ -64,7 +64,7 @@ contract DeployTwabDelegator is ScriptHelpers {
         _claimer,
         YIELD_FEE_RECIPIENT,
         YIELD_FEE_PERCENTAGE,
-        msg.sender // TODO: may change
+        G9_TEAM_OPTIMISM_ADDRESS
       )
     );
   }

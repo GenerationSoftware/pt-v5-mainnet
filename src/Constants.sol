@@ -21,6 +21,9 @@ abstract contract Constants {
   address internal constant EXECUTIVE_TEAM_OPTIMISM_ADDRESS =
     0x8d352083F7094dc51Cd7dA8c5C0985AD6e149629;
 
+  address internal constant G9_TEAM_ETHEREUM_ADDRESS = 0x36B66116F2D6264302edbF1dAc423CfF7858b006;
+  address internal constant G9_TEAM_OPTIMISM_ADDRESS = 0x1e0aefca236790179D21f37fa5Fd59a1f00af1Dd;
+
   // Chain IDs
   uint256 internal constant ETHEREUM_CHAIN_ID = 1;
   uint256 internal constant OPTIMISM_CHAIN_ID = 10;
