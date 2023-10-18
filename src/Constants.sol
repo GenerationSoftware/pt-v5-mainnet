@@ -94,7 +94,9 @@ abstract contract Constants {
   uint64 internal constant AUCTION_DURATION = 6 hours;
   uint64 internal constant AUCTION_TARGET_SALE_TIME = 1 hours;
   uint256 internal constant AUCTION_MAX_REWARD = 10000e18;
-  UD2x18 internal constant FIRST_AUCTION_TARGET_REWARD_FRACTION = UD2x18.wrap(uint64(0)); // TODO: needs to be updated
+  UD2x18 internal constant FIRST_RNG_AUCTION_TARGET_REWARD_FRACTION = UD2x18.wrap(uint64(0.24e18));
+  UD2x18 internal constant FIRST_RNG_RELAY_AUCTION_TARGET_REWARD_FRACTION =
+    UD2x18.wrap(uint64(0.132e18));
 
   /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
   function _getAuctionOffset() internal pure returns (uint32) {
@@ -126,8 +128,8 @@ abstract contract Constants {
   string internal constant USDC_SYMBOL = "USDC";
   string internal constant WETH_SYMBOL = "WETH";
 
-  string internal constant PT_USDC_NAME = "Prize USDC - Aave";
-  string internal constant PT_USDC_SYMBOL = "pUSDC";
+  string internal constant PT_USDC_NAME = "Prize USDC.e - Aave";
+  string internal constant PT_USDC_SYMBOL = "pUSDC.e";
 
   string internal constant PT_WETH_NAME = "Prize WETH - Aave";
   string internal constant PT_WETH_SYMBOL = "pWETH";

@@ -56,7 +56,7 @@ contract DeployL2PrizePool is ScriptHelpers {
       AUCTION_DURATION,
       AUCTION_TARGET_SALE_TIME,
       address(remoteOwner),
-      FIRST_AUCTION_TARGET_REWARD_FRACTION,
+      FIRST_RNG_RELAY_AUCTION_TARGET_REWARD_FRACTION,
       AUCTION_MAX_REWARD
     );
 

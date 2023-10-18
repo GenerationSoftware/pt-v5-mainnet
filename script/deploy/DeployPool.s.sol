@@ -52,7 +52,7 @@ contract DeployPool is ScriptHelpers {
       _getAuctionOffset(),
       AUCTION_DURATION,
       AUCTION_TARGET_SALE_TIME,
-      FIRST_AUCTION_TARGET_REWARD_FRACTION
+      FIRST_RNG_AUCTION_TARGET_REWARD_FRACTION
     );
 
     RngAuctionRelayerDirect rngAuctionRelayerDirect = new RngAuctionRelayerDirect(rngAuction);
@@ -82,7 +82,7 @@ contract DeployPool is ScriptHelpers {
       AUCTION_DURATION,
       AUCTION_TARGET_SALE_TIME,
       address(rngAuctionRelayerDirect),
-      FIRST_AUCTION_TARGET_REWARD_FRACTION,
+      FIRST_RNG_RELAY_AUCTION_TARGET_REWARD_FRACTION,
       AUCTION_MAX_REWARD
     );
 
