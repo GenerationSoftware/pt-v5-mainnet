@@ -26,7 +26,6 @@ contract DeployL2PrizePool is ScriptHelpers {
 
     IERC20 prizeToken = IERC20(_getToken("POOL"));
 
-    // TODO: which period offset should we use?
     TwabController twabController = new TwabController(TWAB_PERIOD_LENGTH, _getAuctionOffset());
 
     console2.log("constructing prize pool....");

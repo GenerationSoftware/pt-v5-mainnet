@@ -292,9 +292,7 @@ abstract contract ScriptHelpers is Constants, Script {
     return _getVault(selector);
   }
 
-  function _getVault(
-    bytes memory selector
-  ) internal returns (Vault) {
+  function _getVault(bytes memory selector) internal returns (Vault) {
     string memory _artifactsPath = _getDeployPath("DeployVault.s.sol");
     string[] memory filesName = _getDeploymentArtifacts(_artifactsPath);
 
@@ -344,11 +342,7 @@ abstract contract ScriptHelpers is Constants, Script {
           //   ),
           //   "CREATE2"
           // )
-          keccak256(
-            abi.encodePacked(
-              selector
-            )
-          ) ==
+          keccak256(abi.encodePacked(selector)) ==
           keccak256(
             abi.encodePacked(
               abi.decode(

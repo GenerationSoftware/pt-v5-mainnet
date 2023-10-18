@@ -256,7 +256,7 @@ export const getVaultInfos = (transactionData: any) => {
   }
 
   return { underlyingAssetAddress, name, symbol };
-}
+};
 
 export const generateVaultList = (vaultDeploymentPath: string): VaultList => {
   const vaultList: VaultList = {
@@ -277,7 +277,6 @@ export const generateVaultList = (vaultDeploymentPath: string): VaultList => {
         const createdContract = additionalContracts[0];
 
         if (createdContract && createdContract.transactionType === "CREATE2") {
-
           const { underlyingAssetAddress, name, symbol } = getVaultInfos(transaction.data);
 
           vaultList.tokens.push(

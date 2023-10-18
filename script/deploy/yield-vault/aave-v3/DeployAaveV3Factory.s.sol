@@ -13,7 +13,7 @@ contract DeployAaveV3Factory is ScriptHelpers {
     if (block.chainid == OPTIMISM_CHAIN_ID) {
       new AaveV3ERC4626Factory(
         IPool(address(AaveV3Optimism.POOL)),
-        EXECUTIVE_TEAM_OPTIMISM_ADDRESS, // Reward recipient,
+        EXECUTIVE_TEAM_OPTIMISM_ADDRESS, // Reward recipient, // TODO: G9 Safe
         IRewardsController(address(AaveV3Optimism.DEFAULT_INCENTIVES_CONTROLLER))
       );
     }

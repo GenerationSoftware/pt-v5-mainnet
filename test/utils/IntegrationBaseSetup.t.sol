@@ -93,7 +93,13 @@ contract IntegrationBaseSetup is TestHelpers {
     prizePool.setDrawManager(address(this));
 
     ClaimerFactory claimerFactory = new ClaimerFactory();
-    claimer = claimerFactory.createClaimer(prizePool, 0.0001e18, 1000e18, drawPeriodSeconds, ud2x18(0.5e18));
+    claimer = claimerFactory.createClaimer(
+      prizePool,
+      0.0001e18,
+      1000e18,
+      drawPeriodSeconds,
+      ud2x18(0.5e18)
+    );
 
     yieldVault = new YieldVault(
       address(underlyingAsset),
