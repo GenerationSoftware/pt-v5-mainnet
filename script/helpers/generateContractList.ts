@@ -218,6 +218,10 @@ export const generateContractList = (deploymentPaths: string[]): ContractList =>
               contractName = "LiquidationPair";
             }
 
+            if (contractName === "ClaimerFactory") {
+              contractName = "Claimer";
+            }
+
             contractAddress = createdContract.address;
             transactionType = "CREATE";
           }
