@@ -93,7 +93,13 @@ contract IntegrationBaseSetup is TestHelpers {
     prizePool.setDrawManager(address(this));
 
     ClaimerFactory claimerFactory = new ClaimerFactory();
-    claimer = claimerFactory.createClaimer(prizePool, 0.0001e18, 1000e18, drawPeriodSeconds, ud2x18(0.5e18));
+    claimer = claimerFactory.createClaimer(
+      prizePool,
+      0.0001e18,
+      1000e18,
+      drawPeriodSeconds,
+      ud2x18(0.5e18)
+    );
 
     yieldVault = new YieldVault(
       address(underlyingAsset),
@@ -120,7 +126,7 @@ contract IntegrationBaseSetup is TestHelpers {
 
     // this is approximately the maximum decay constant, as the CGDA formula requires computing e^(decayConstant * time).
     // since the data type is SD59x18 and e^134 ~= 1e58, we can divide 134 by the draw period to get the max decay constant.
-    SD59x18 _decayConstant = convert(130).div(convert(int(uint(drawPeriodSeconds))));
+    SD59x18 _decayConstant = convert(130).div(convert(int256(uint256(drawPeriodSeconds))));
     liquidationPair = liquidationPairFactory.createPair(
       ILiquidationSource(vault),
       address(prizeToken),
@@ -134,7 +140,7 @@ contract IntegrationBaseSetup is TestHelpers {
       _virtualReserveOut // just make it up
     );
 
-    vault.setLiquidationPair(liquidationPair);
+    vault.setLiquidationPair(address(liquidationPair));
 
     liquidationRouter = new LiquidationRouter(liquidationPairFactory);
   }

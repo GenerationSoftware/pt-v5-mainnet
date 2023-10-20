@@ -185,6 +185,6 @@ contract ForkBaseSetup is TestHelpers {
       _virtualReserveOut
     );
 
-    vault.setLiquidationPair(liquidationPair);
+    vault.setLiquidationPair(address(liquidationPair));
   }
 }

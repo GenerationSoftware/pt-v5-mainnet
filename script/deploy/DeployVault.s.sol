@@ -21,6 +21,8 @@ import { ScriptHelpers } from "../helpers/ScriptHelpers.sol";
 
 contract DeployVault is ScriptHelpers {
   function _deployVault(
+    string memory _tokenName,
+    string memory _tokenSymbol,
     IERC4626 _yieldVault,
     uint104 _exchangeRateAssetsPerPool,
     uint104 _minAuctionSize
@@ -33,19 +35,21 @@ contract DeployVault is ScriptHelpers {
 
     address _vaultAddress = vaultFactory.deployVault(
       _underlyingAsset,
-      string.concat("PoolTogether Prize ", _underlyingAsset.name()),
-      string.concat("PT", _underlyingAsset.symbol()),
+      _tokenName,
+      _tokenSymbol,
       _yieldVault,
       prizePool,
       address(_getClaimer()),
       YIELD_FEE_RECIPIENT,
       YIELD_FEE_PERCENTAGE,
-      msg.sender
+      msg.sender // Need to keep ownership to set the LiquidationPair
     );
 
     vault = Vault(_vaultAddress);
 
-    vault.setLiquidationPair(_createPair(prizePool, vault, _exchangeRateAssetsPerPool, _minAuctionSize));
+    vault.setLiquidationPair(
+      _createPair(prizePool, vault, _exchangeRateAssetsPerPool, _minAuctionSize)
+    );
   }
 
   function _createPair(
@@ -53,36 +57,50 @@ contract DeployVault is ScriptHelpers {
     Vault _vault,
     uint104 _exchangeRateAssetsPerPool,
     uint104 _minAuctionSize
-  ) internal returns (LiquidationPair pair) {
-    uint32 _drawPeriodSeconds = _prizePool.drawPeriodSeconds();
+  ) internal returns (address) {
+    uint48 _drawPeriodSeconds = _prizePool.drawPeriodSeconds();
 
-    pair = _getLiquidationPairFactory().createPair(
+    LiquidationPair pair = _getLiquidationPairFactory().createPair(
       ILiquidationSource(_vault),
       address(_getToken("POOL")),
       address(_vault),
-      _drawPeriodSeconds,
-      uint32(_prizePool.firstDrawStartsAt()),
-      _getTargetFirstSaleTime(_drawPeriodSeconds),
+      uint32(_drawPeriodSeconds),
+      uint32(_prizePool.firstDrawOpensAt()),
+      _getTargetFirstSaleTime(uint32(_drawPeriodSeconds)),
       _getDecayConstant(),
       1e18, // 1 POOL
       _exchangeRateAssetsPerPool,
       _minAuctionSize
     );
+
+    return address(pair);
   }
 
   function run() public {
     vm.startBroadcast();
 
     /* USDC */
-    _deployVault(_getAaveV3YieldVault(OPTIMISM_USDC_ADDRESS), 0.56e6, 4e6);
+    _deployVault(
+      PT_USDC_NAME,
+      PT_USDC_SYMBOL,
+      _getAaveV3YieldVault(OPTIMISM_USDC_ADDRESS),
+      0.49e6,
+      4e6
+    );
 
-    // POOL / USDC = 0.56
-    // WETH / USDC = 1702
-    // WETH / POOL = 1702 / 0.56 = 3039
-    // => 1 POOL = 1 / 3039 WETH
+    // POOL / USDC = 0.49
+    // WETH / USDC = 1560
+    // WETH / POOL = 3122
+    // => 1 POOL = 1 / 3122 WETH
 
     /* wETH */
-    _deployVault(_getAaveV3YieldVault(OPTIMISM_WETH_ADDRESS), 0.000329055610398157e18, 0.000329055610398157e18*8 );
+    _deployVault(
+      PT_WETH_NAME,
+      PT_WETH_SYMBOL,
+      _getAaveV3YieldVault(OPTIMISM_WETH_ADDRESS),
+      0.000320307495195387e18,
+      0.000320307495195387e18 * 8
+    );
 
     vm.stopBroadcast();
   }

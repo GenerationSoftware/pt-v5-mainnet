@@ -39,7 +39,7 @@ contract DeployPool is ScriptHelpers {
     console2.log("constructing rng stuff....");
 
     ChainlinkVRFV2Direct chainlinkRng = new ChainlinkVRFV2Direct(
-      EXECUTIVE_TEAM_ETHEREUM_ADDRESS,
+      G9_TEAM_ETHEREUM_ADDRESS,
       _getVrfV2Wrapper(),
       CHAINLINK_CALLBACK_GAS_LIMIT,
       CHAINLINK_REQUEST_CONFIRMATIONS
@@ -47,11 +47,12 @@ contract DeployPool is ScriptHelpers {
 
     RngAuction rngAuction = new RngAuction(
       RNGInterface(chainlinkRng),
-      EXECUTIVE_TEAM_ETHEREUM_ADDRESS,
+      G9_TEAM_ETHEREUM_ADDRESS,
       DRAW_PERIOD_SECONDS,
       _getAuctionOffset(),
       AUCTION_DURATION,
-      AUCTION_TARGET_SALE_TIME
+      AUCTION_TARGET_SALE_TIME,
+      FIRST_RNG_AUCTION_TARGET_REWARD_FRACTION
     );
 
     RngAuctionRelayerDirect rngAuctionRelayerDirect = new RngAuctionRelayerDirect(rngAuction);
@@ -65,7 +66,7 @@ contract DeployPool is ScriptHelpers {
         prizeToken: prizeToken,
         twabController: twabController,
         drawPeriodSeconds: DRAW_PERIOD_SECONDS,
-        firstDrawStartsAt: _getFirstDrawStartsAt(),
+        firstDrawOpensAt: _getFirstDrawOpensAt(),
         smoothing: _getContributionsSmoothing(),
         grandPrizePeriodDraws: GRAND_PRIZE_PERIOD_DRAWS,
         numberOfTiers: MIN_NUMBER_OF_TIERS,
@@ -78,9 +79,10 @@ contract DeployPool is ScriptHelpers {
 
     RngRelayAuction rngRelayAuction = new RngRelayAuction(
       prizePool,
-      address(rngAuctionRelayerDirect),
       AUCTION_DURATION,
       AUCTION_TARGET_SALE_TIME,
+      address(rngAuctionRelayerDirect),
+      FIRST_RNG_RELAY_AUCTION_TARGET_REWARD_FRACTION,
       AUCTION_MAX_REWARD
     );
 

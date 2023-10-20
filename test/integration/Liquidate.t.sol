@@ -44,7 +44,7 @@ contract LiquidateIntegrationTest is IntegrationBaseSetup {
 
     // Because of the yield smooting, only 10% of the prize tokens contributed can be awarded.
     assertEq(
-      prizePool.getContributedBetween(address(vault), 1, 1),
+      prizePool.getContributedBetween(address(vault), 1, 2),
       (_prizeTokenContributed * 10) / 100
     );
 

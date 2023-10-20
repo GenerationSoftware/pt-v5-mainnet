@@ -2,7 +2,6 @@
 pragma solidity 0.8.19;
 
 import { console2 } from "forge-std/console2.sol";
-
 import { Script } from "forge-std/Script.sol";
 
 import { IERC20 } from "openzeppelin/interfaces/IERC20.sol";
@@ -26,7 +25,6 @@ contract DeployL2PrizePool is ScriptHelpers {
 
     IERC20 prizeToken = IERC20(_getToken("POOL"));
 
-    // TODO: which period offset should we use?
     TwabController twabController = new TwabController(TWAB_PERIOD_LENGTH, _getAuctionOffset());
 
     console2.log("constructing prize pool....");
@@ -36,7 +34,7 @@ contract DeployL2PrizePool is ScriptHelpers {
         prizeToken: prizeToken,
         twabController: twabController,
         drawPeriodSeconds: DRAW_PERIOD_SECONDS,
-        firstDrawStartsAt: _getFirstDrawStartsAt(),
+        firstDrawOpensAt: _getFirstDrawOpensAt(),
         smoothing: _getContributionsSmoothing(),
         grandPrizePeriodDraws: GRAND_PRIZE_PERIOD_DRAWS,
         numberOfTiers: MIN_NUMBER_OF_TIERS,
@@ -55,9 +53,10 @@ contract DeployL2PrizePool is ScriptHelpers {
 
     RngRelayAuction rngRelayAuction = new RngRelayAuction(
       prizePool,
-      address(remoteOwner),
       AUCTION_DURATION,
       AUCTION_TARGET_SALE_TIME,
+      address(remoteOwner),
+      FIRST_RNG_RELAY_AUCTION_TARGET_REWARD_FRACTION,
       AUCTION_MAX_REWARD
     );
 

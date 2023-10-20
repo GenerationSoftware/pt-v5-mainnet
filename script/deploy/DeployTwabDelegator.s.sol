@@ -9,13 +9,17 @@ import { TwabDelegator } from "pt-v5-twab-delegator/TwabDelegator.sol";
 import { Vault } from "pt-v5-vault/Vault.sol";
 
 import { ScriptHelpers } from "../helpers/ScriptHelpers.sol";
-contract DeployTwabDelegator is ScriptHelpers {
-  function _deployTwabDelegator(TwabController _twabController, Vault _vault) internal {
-    ERC20 _underlyingAsset = ERC20(_vault.asset());
 
+contract DeployTwabDelegator is ScriptHelpers {
+  function _deployTwabDelegator(
+    TwabController _twabController,
+    string memory _tokenName,
+    string memory _tokenSymbol,
+    Vault _vault
+  ) internal {
     new TwabDelegator(
-      string.concat("PoolTogether Staked Prize ", _underlyingAsset.name()),
-      string.concat("stkPT", _underlyingAsset.symbol()),
+      string.concat("Staked ", _tokenName),
+      string.concat("stk", _tokenSymbol),
       _twabController,
       _vault
     );
@@ -29,11 +33,12 @@ contract DeployTwabDelegator is ScriptHelpers {
     /* USDC */
     _deployTwabDelegator(
       _twabController,
+      PT_USDC_NAME,
+      PT_USDC_SYMBOL,
       _getVault(
         OPTIMISM_USDC_ADDRESS,
         PT_USDC_NAME,
         PT_USDC_SYMBOL,
-        _twabController,
         _getAaveV3YieldVault(OPTIMISM_USDC_ADDRESS),
         _prizePool,
         _claimer,
@@ -46,11 +51,12 @@ contract DeployTwabDelegator is ScriptHelpers {
     /* wETH */
     _deployTwabDelegator(
       _twabController,
+      PT_WETH_NAME,
+      PT_WETH_SYMBOL,
       _getVault(
         OPTIMISM_WETH_ADDRESS,
         PT_WETH_NAME,
         PT_WETH_SYMBOL,
-        _twabController,
         _getAaveV3YieldVault(OPTIMISM_WETH_ADDRESS),
         _prizePool,
         _claimer,

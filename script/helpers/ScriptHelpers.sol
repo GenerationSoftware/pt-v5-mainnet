@@ -14,6 +14,7 @@ import { strings } from "solidity-stringutils/strings.sol";
 import { AaveV3ERC4626Factory } from "yield-daddy/aave-v3/AaveV3ERC4626Factory.sol";
 
 import { Claimer } from "pt-v5-claimer/Claimer.sol";
+import { ClaimerFactory } from "pt-v5-claimer/ClaimerFactory.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
 import { PrizePool } from "pt-v5-prize-pool/PrizePool.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
@@ -202,11 +203,76 @@ abstract contract ScriptHelpers is Constants, Script {
 
   /* ============ Getters ============ */
 
-  function _getClaimer() internal returns (Claimer) {
+  function _getClaimerFactory() internal returns (ClaimerFactory) {
     return
-      Claimer(
-        _getContractAddress("Claimer", _getDeployPath(DEPLOY_POOL_SCRIPT), "claimer-not-found")
+      ClaimerFactory(
+        _getContractAddress(
+          "ClaimerFactory",
+          _getDeployPath(DEPLOY_POOL_SCRIPT),
+          "claimer-factory-not-found"
+        )
       );
+  }
+
+  function _getClaimer() internal returns (Claimer) {
+    string memory _artifactsPath = _getDeployPath("DeployL2PrizePool.s.sol");
+    string[] memory filesName = _getDeploymentArtifacts(_artifactsPath);
+
+    // Loop through deployment artifacts and find call to ClaimerFactory's `deployVault` function
+    for (uint256 i; i < filesName.length; i++) {
+      string memory jsonFile = vm.readFile(
+        string.concat(vm.projectRoot(), _artifactsPath, filesName[i])
+      );
+
+      bytes[] memory rawTxs = abi.decode(vm.parseJson(jsonFile, ".transactions"), (bytes[]));
+
+      for (uint256 j; j < rawTxs.length; j++) {
+        string memory index = vm.toString(j);
+
+        if (
+          _matches(
+            abi.decode(
+              stdJson.parseRaw(
+                jsonFile,
+                string.concat(".transactions[", index, "].transactionType")
+              ),
+              (string)
+            ),
+            "CALL"
+          ) &&
+          _matches(
+            abi.decode(
+              stdJson.parseRaw(jsonFile, string.concat(".transactions[", index, "].contractName")),
+              (string)
+            ),
+            "ClaimerFactory"
+          ) &&
+          _matches(
+            abi.decode(
+              stdJson.parseRaw(
+                jsonFile,
+                string.concat(".transactions[", index, "].additionalContracts[0].transactionType")
+              ),
+              (string)
+            ),
+            "CREATE"
+          ) // Works if there is only one claimer deployed
+        ) {
+          return
+            Claimer(
+              abi.decode(
+                stdJson.parseRaw(
+                  jsonFile,
+                  string.concat(".transactions[", index, "].additionalContracts[0].address")
+                ),
+                (address)
+              )
+            );
+        }
+      }
+    }
+
+    revert("claimer-not-found");
   }
 
   function _getL1RngAuctionRelayerRemote() internal returns (RngAuctionRelayer) {
@@ -264,24 +330,22 @@ abstract contract ScriptHelpers is Constants, Script {
     address _asset,
     string memory _name,
     string memory _symbol,
-    TwabController _twabController,
     ERC4626 _yieldVault,
     PrizePool _prizePool,
     address _claimer,
     address _yieldFeeRecipient,
-    uint256 _yieldFeePercentage,
+    uint32 _yieldFeePercentage,
     address _owner
   ) internal returns (Vault) {
     bytes memory selector = abi.encodeWithSelector(
       bytes4(
         keccak256(
-          "deployVault(address,string,string,address,address,address,address,address,uint256,address)"
+          "deployVault(address,string,string,address,address,address,address,uint32,address)"
         )
       ),
       _asset,
       _name,
       _symbol,
-      address(_twabController),
       address(_yieldVault),
       address(_prizePool),
       _claimer,
@@ -292,9 +356,7 @@ abstract contract ScriptHelpers is Constants, Script {
     return _getVault(selector);
   }
 
-  function _getVault(
-    bytes memory selector
-  ) internal returns (Vault) {
+  function _getVault(bytes memory selector) internal returns (Vault) {
     string memory _artifactsPath = _getDeployPath("DeployVault.s.sol");
     string[] memory filesName = _getDeploymentArtifacts(_artifactsPath);
 
@@ -310,45 +372,7 @@ abstract contract ScriptHelpers is Constants, Script {
         string memory index = vm.toString(j);
 
         if (
-          // _matches(
-          //   abi.decode(
-          //     stdJson.parseRaw(
-          //       jsonFile,
-          //       string.concat(".transactions[", index, "].transactionType")
-          //     ),
-          //     (string)
-          //   ),
-          //   "CALL"
-          // ) &&
-          // _matches(
-          //   abi.decode(
-          //     stdJson.parseRaw(jsonFile, string.concat(".transactions[", index, "].contractName")),
-          //     (string)
-          //   ),
-          //   "VaultFactory"
-          // ) &&
-          // _matches(
-          //   abi.decode(
-          //     stdJson.parseRaw(jsonFile, string.concat(".transactions[", index, "].arguments[2]")),
-          //     (string)
-          //   ),
-          //   _tokenSymbol
-          // ) &&
-          // _matches(
-          //   abi.decode(
-          //     stdJson.parseRaw(
-          //       jsonFile,
-          //       string.concat(".transactions[", index, "].additionalContracts[0].transactionType")
-          //     ),
-          //     (string)
-          //   ),
-          //   "CREATE2"
-          // )
-          keccak256(
-            abi.encodePacked(
-              selector
-            )
-          ) ==
+          keccak256(abi.encodePacked(selector)) ==
           keccak256(
             abi.encodePacked(
               abi.decode(

@@ -12,7 +12,7 @@ abstract contract Constants {
   address internal constant OPTIMISM_DEFENDER_ADDRESS = 0xCeA11E14067697C085e1142afd2540b23f18304D;
 
   // MessageExecutor
-  address internal constant ERC5164_EXECUTOR_OPTIMISM = 0x890a87E71E731342a6d10e7628bd1F0733ce3296;
+  address internal constant ERC5164_EXECUTOR_OPTIMISM = 0x139f6dD114a9C45Ba43eE22C5e03c53de0c13225;
 
   // Multisigs
   address internal constant EXECUTIVE_TEAM_ETHEREUM_ADDRESS =
@@ -21,13 +21,16 @@ abstract contract Constants {
   address internal constant EXECUTIVE_TEAM_OPTIMISM_ADDRESS =
     0x8d352083F7094dc51Cd7dA8c5C0985AD6e149629;
 
+  address internal constant G9_TEAM_ETHEREUM_ADDRESS = 0x36B66116F2D6264302edbF1dAc423CfF7858b006;
+  address internal constant G9_TEAM_OPTIMISM_ADDRESS = 0x1e0aefca236790179D21f37fa5Fd59a1f00af1Dd;
+
   // Chain IDs
   uint256 internal constant ETHEREUM_CHAIN_ID = 1;
   uint256 internal constant OPTIMISM_CHAIN_ID = 10;
 
   // Deploy parameters
   // Chainlink VRF
-  uint32 internal constant CHAINLINK_CALLBACK_GAS_LIMIT = 200_000;
+  uint32 internal constant CHAINLINK_CALLBACK_GAS_LIMIT = 55_000;
   uint16 internal constant CHAINLINK_REQUEST_CONFIRMATIONS = 3;
 
   // Claimer
@@ -35,11 +38,11 @@ abstract contract Constants {
   uint256 internal constant CLAIMER_MAX_FEE = 10000e18;
 
   function _getClaimerTimeToReachMaxFee() internal pure returns (uint256) {
-    return (DRAW_PERIOD_SECONDS - (2 * AUCTION_DURATION)) / 2;
+    return (DRAW_PERIOD_SECONDS - (2 * AUCTION_DURATION)) / 2; // A quarter of the Draw period
   }
 
   function _getClaimerMaxFeePortionOfPrize() internal pure returns (UD2x18) {
-    return ud2x18(0.5e18);
+    return ud2x18(0.1e18);
   }
 
   // Liquidation Pair
@@ -75,7 +78,7 @@ abstract contract Constants {
   uint24 internal constant GRAND_PRIZE_PERIOD_DRAWS = 365; // Once a year for daily draws
   uint8 internal constant MIN_NUMBER_OF_TIERS = 3;
   uint256 internal constant MIN_TIME_AHEAD = DRAW_PERIOD_SECONDS;
-  uint8 internal constant RESERVE_SHARES = 100;
+  uint8 internal constant RESERVE_SHARES = 80;
   uint8 internal constant TIER_SHARES = 100;
 
   function _getContributionsSmoothing() internal pure returns (SD1x18) {
@@ -83,18 +86,21 @@ abstract contract Constants {
   }
 
   /// @notice Returns the start timestamp of the first draw.
-  function _getFirstDrawStartsAt() internal pure returns (uint48) {
-    return uint48(1693594800); // Sep 1, 2023, 7:00:00 PM UTC
+  function _getFirstDrawOpensAt() internal pure returns (uint48) {
+    return uint48(1697767200); // Oct 20, 2023, 2:00:00 AM
   }
 
   // RngAuctions
   uint64 internal constant AUCTION_DURATION = 6 hours;
   uint64 internal constant AUCTION_TARGET_SALE_TIME = 1 hours;
-  uint256 internal constant AUCTION_MAX_REWARD = 10000e18;
+  uint256 internal constant AUCTION_MAX_REWARD = 500e18;
+  UD2x18 internal constant FIRST_RNG_AUCTION_TARGET_REWARD_FRACTION = UD2x18.wrap(uint64(0.24e18));
+  UD2x18 internal constant FIRST_RNG_RELAY_AUCTION_TARGET_REWARD_FRACTION =
+    UD2x18.wrap(uint64(0.132e18));
 
   /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
   function _getAuctionOffset() internal pure returns (uint32) {
-    return uint32(_getFirstDrawStartsAt() - 3 days);
+    return uint32(_getFirstDrawOpensAt() - 3 days);
   }
 
   // Twab
@@ -122,16 +128,16 @@ abstract contract Constants {
   string internal constant USDC_SYMBOL = "USDC";
   string internal constant WETH_SYMBOL = "WETH";
 
-  string internal constant PT_USDC_NAME = "PoolTogether Prize USD Coin";
-  string internal constant PT_USDC_SYMBOL = "PTUSDC";
+  string internal constant PT_USDC_NAME = "Prize USDC.e - Aave";
+  string internal constant PT_USDC_SYMBOL = "pUSDC.e";
 
-  string internal constant PT_WETH_NAME = "PoolTogether Prize Wrapped Ether";
-  string internal constant PT_WETH_SYMBOL = "PTWETH";
+  string internal constant PT_WETH_NAME = "Prize WETH - Aave";
+  string internal constant PT_WETH_SYMBOL = "pWETH";
 
   // Token prices
   uint256 internal constant USDC_PRICE = 100000000;
-  uint256 internal constant ETH_PRICE = 170408610000;
-  uint256 internal constant PRIZE_TOKEN_PRICE = 0.562709e18;
+  uint256 internal constant ETH_PRICE = 156060000000;
+  uint256 internal constant PRIZE_TOKEN_PRICE = 0.493770e18;
 
   // Vault
   uint32 internal constant YIELD_FEE_PERCENTAGE = 0; // 0%

@@ -22,7 +22,7 @@ contract ForkAaveV3Setup is ForkBaseSetup {
 
     AaveV3ERC4626Factory _aaveV3Factory = new AaveV3ERC4626Factory(
       IPool(address(AaveV3Optimism.POOL)),
-      EXECUTIVE_TEAM_OPTIMISM_ADDRESS, // Reward recipient,
+      G9_TEAM_OPTIMISM_ADDRESS, // Reward recipient,
       IRewardsController(address(AaveV3Optimism.DEFAULT_INCENTIVES_CONTROLLER))
     );
 

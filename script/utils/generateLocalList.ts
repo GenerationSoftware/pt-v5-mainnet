@@ -7,9 +7,7 @@ import {
 
 const vaultDeploymentPath = `${rootFolder}/broadcast/DeployVault.s.sol/10`;
 
-const mainnetDeploymentPaths = [
-  `${rootFolder}/broadcast/DeployL1RngAuction.s.sol/1`,
-];
+const mainnetDeploymentPaths = [`${rootFolder}/broadcast/DeployL1RngAuction.s.sol/1`];
 
 const optimismDeploymentPaths = [
   `${rootFolder}/broadcast/DeployAaveV3Factory.s.sol/10`,
