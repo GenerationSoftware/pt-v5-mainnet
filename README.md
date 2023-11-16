@@ -135,3 +135,9 @@ To deploy the Optimism mainnet contracts, run the following command:
 To generate the local contract list, run the following command: `npm run gen:local`
 
 To generate the mainnet contract list, run the following command: `npm run gen:mainnet`
+
+### Contract API Reference
+
+To generate the reference API, first see the DEV NOTE comment in the `script/utils/generateContractReference.ts` file, apply the library fix, and run the following command: `npm run gen:contract-reference`
+
+Docs will be output to the `reference-out` folder.
