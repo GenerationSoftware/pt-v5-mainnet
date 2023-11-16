@@ -17,3 +17,6 @@ node_modules
 # VS Code history
 .history
 .env
+
+# Generated Docs
+reference-out/
