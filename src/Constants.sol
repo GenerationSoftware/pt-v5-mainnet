@@ -86,8 +86,11 @@ abstract contract Constants {
   }
 
   /// @notice Returns the start timestamp of the first draw.
-  function _getFirstDrawOpensAt() internal pure returns (uint48) {
-    return uint48(1697767200); // Oct 20, 2023, 2:00:00 AM
+  function _getFirstDrawOpensAt() internal view returns (uint48) {
+    if (block.timestamp < 1693594800) revert("block timestamp doesn't seem right"); // make sure we're not on some relative script time
+    uint48 secondsInDay = 1 days;
+    uint48 firstDrawStartsAt = uint48(block.timestamp / secondsInDay + 1) * secondsInDay + 7200; // next day at 2:00:00 AM UTC
+    return firstDrawStartsAt;
   }
 
   // RngAuctions
@@ -99,7 +102,7 @@ abstract contract Constants {
     UD2x18.wrap(uint64(0.132e18));
 
   /// @notice Returns the timestamp of the auction offset, aligned to the draw offset.
-  function _getAuctionOffset() internal pure returns (uint32) {
+  function _getAuctionOffset() internal view returns (uint32) {
     return uint32(_getFirstDrawOpensAt() - 3 days);
   }
 
