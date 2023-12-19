@@ -55,3 +55,7 @@
 	path = lib/pt-v5-vault-boost
 	url = https://github.com/generationsoftware/pt-v5-vault-boost
 	branch = prod-deploy-2
+[submodule "lib/pt-v5-twab-rewards"]
+	path = lib/pt-v5-twab-rewards
+	url = https://github.com/GenerationSoftware/pt-v5-twab-rewards
+	branch = prod-deploy-2

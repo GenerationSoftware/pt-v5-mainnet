@@ -14,6 +14,7 @@ const optimismDeploymentPaths = [
   `${rootFolder}/broadcast/DeployAaveV3YieldVault.s.sol/10`,
   `${rootFolder}/broadcast/DeployL2PrizePool.s.sol/10`,
   `${rootFolder}/broadcast/DeployTwabDelegator.s.sol/10`,
+  `${rootFolder}/broadcast/DeployTwabRewards.s.sol/10`,
   vaultDeploymentPath,
 ];
 
