@@ -10,7 +10,7 @@ import { Claimer } from "pt-v5-claimer/Claimer.sol";
 import { PrizePool } from "pt-v5-prize-pool/PrizePool.sol";
 import { LiquidationPair } from "pt-v5-cgda-liquidator/LiquidationPair.sol";
 import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
-import { Vault } from "pt-v5-vault/Vault.sol";
+import { VaultV2 as Vault } from "pt-v5-vault/Vault.sol";
 import { YieldVault } from "pt-v5-vault-mock/YieldVault.sol";
 
 import { Constants } from "../../src/Constants.sol";

@@ -14,8 +14,8 @@ import { LiquidationPair } from "pt-v5-cgda-liquidator/LiquidationPair.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
 import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
 import { PrizePool, SD59x18 } from "pt-v5-prize-pool/PrizePool.sol";
-import { Vault } from "pt-v5-vault/Vault.sol";
-import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
+import { VaultV2 as Vault } from "pt-v5-vault/Vault.sol";
+import { VaultFactoryV2 as VaultFactory } from "pt-v5-vault/VaultFactory.sol";
 
 import { ScriptHelpers } from "../helpers/ScriptHelpers.sol";
 

@@ -23,7 +23,7 @@ import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
 import { PrizePool, ConstructorParams, SD59x18 } from "pt-v5-prize-pool/PrizePool.sol";
 import { RNGInterface } from "rng/RNGInterface.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
-import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
+import { VaultFactoryV2 as VaultFactory } from "pt-v5-vault/VaultFactory.sol";
 
 import { ScriptHelpers } from "../helpers/ScriptHelpers.sol";
 

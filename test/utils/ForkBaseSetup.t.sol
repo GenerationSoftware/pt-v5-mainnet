@@ -23,7 +23,7 @@ import { ILiquidationSource } from "pt-v5-liquidator-interfaces/ILiquidationSour
 import { LiquidationPair } from "pt-v5-cgda-liquidator/LiquidationPair.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
 import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
-import { Vault } from "pt-v5-vault/Vault.sol";
+import { VaultV2 as Vault } from "pt-v5-vault/Vault.sol";
 import { YieldVault } from "pt-v5-vault-mock/YieldVault.sol";
 
 import { Utils } from "./Utils.t.sol";

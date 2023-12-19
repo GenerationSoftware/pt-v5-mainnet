@@ -19,8 +19,8 @@ import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFac
 import { PrizePool } from "pt-v5-prize-pool/PrizePool.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
 import { RngAuctionRelayer } from "pt-v5-draw-auction/abstract/RngAuctionRelayer.sol";
-import { Vault } from "pt-v5-vault/Vault.sol";
-import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
+import { VaultV2 as Vault } from "pt-v5-vault/Vault.sol";
+import { VaultFactoryV2 as VaultFactory } from "pt-v5-vault/VaultFactory.sol";
 
 import { Constants } from "../../src/Constants.sol";
 
