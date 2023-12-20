@@ -6,7 +6,7 @@ import { ERC20 } from "openzeppelin/token/ERC20/ERC20.sol";
 import { PrizePool } from "pt-v5-prize-pool/PrizePool.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
 import { TwabDelegator } from "pt-v5-twab-delegator/TwabDelegator.sol";
-import { Vault } from "pt-v5-vault/Vault.sol";
+import { VaultV2 as Vault } from "pt-v5-vault/Vault.sol";
 
 import { ScriptHelpers } from "../helpers/ScriptHelpers.sol";
 

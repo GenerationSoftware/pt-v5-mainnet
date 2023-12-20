@@ -11,7 +11,7 @@ import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
 import { ClaimerFactory } from "pt-v5-claimer/ClaimerFactory.sol";
 import { LiquidationPairFactory } from "pt-v5-cgda-liquidator/LiquidationPairFactory.sol";
 import { LiquidationRouter } from "pt-v5-cgda-liquidator/LiquidationRouter.sol";
-import { VaultFactory } from "pt-v5-vault/VaultFactory.sol";
+import { VaultFactoryV2 as VaultFactory } from "pt-v5-vault/VaultFactory.sol";
 import { VaultBoosterFactory } from "pt-v5-vault-boost/VaultBoosterFactory.sol";
 
 import { RemoteOwner } from "remote-owner/RemoteOwner.sol";
