@@ -38,3 +38,6 @@
 [submodule "lib/pt-v5-tpda-liquidator"]
 	path = lib/pt-v5-tpda-liquidator
 	url = https://github.com/generationsoftware/pt-v5-tpda-liquidator
+[submodule "lib/pt-v5-vault"]
+	path = lib/pt-v5-vault
+	url = https://github.com/generationsoftware/pt-v5-vault
