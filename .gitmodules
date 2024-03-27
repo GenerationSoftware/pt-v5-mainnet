@@ -39,3 +39,6 @@
 [submodule "lib/pt-v5-draw-manager"]
 	path = lib/pt-v5-draw-manager
 	url = https://github.com/generationsoftware/pt-v5-draw-manager
+[submodule "lib/pt-v5-tpda-liquidator"]
+	path = lib/pt-v5-tpda-liquidator
+	url = https://github.com/generationsoftware/pt-v5-tpda-liquidator
