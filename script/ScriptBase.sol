@@ -44,7 +44,7 @@ struct Configuration {
 contract ScriptBase is Script {
     using SafeCast for uint256;
 
-    function loadConfig() internal pure returns (Configuration memory config) {
+    function loadConfig(string memory filepath) internal pure returns (Configuration memory config) {
         string memory file = vm.readFile(filepath);
 
         // Twab Controller
