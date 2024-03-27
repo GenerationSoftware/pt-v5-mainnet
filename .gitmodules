@@ -33,3 +33,6 @@
 	path = lib/pt-v5-twab-rewards
 	url = https://github.com/GenerationSoftware/pt-v5-twab-rewards
 	branch = prod-deploy-2
+[submodule "lib/pt-v5-rng-witnet"]
+	path = lib/pt-v5-rng-witnet
+	url = https://github.com/GenerationSoftware/pt-v5-rng-witnet
