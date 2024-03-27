@@ -36,3 +36,6 @@
 [submodule "lib/pt-v5-rng-witnet"]
 	path = lib/pt-v5-rng-witnet
 	url = https://github.com/GenerationSoftware/pt-v5-rng-witnet
+[submodule "lib/pt-v5-draw-manager"]
+	path = lib/pt-v5-draw-manager
+	url = https://github.com/generationsoftware/pt-v5-draw-manager
