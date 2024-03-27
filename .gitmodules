@@ -41,3 +41,6 @@
 [submodule "lib/pt-v5-vault"]
 	path = lib/pt-v5-vault
 	url = https://github.com/generationsoftware/pt-v5-vault
+[submodule "lib/pt-v5-reward-burner"]
+	path = lib/pt-v5-reward-burner
+	url = https://github.com/generationsoftware/pt-v5-reward-burner
