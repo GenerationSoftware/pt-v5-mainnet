@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
+pragma solidity ^0.8.24;
 
 // import { AaveV3Optimism } from "aave-address-book/AaveV3Optimism.sol";
 import { AaveV3ERC4626Factory, IPool, IRewardsController } from "yield-daddy/aave-v3/AaveV3ERC4626Factory.sol";

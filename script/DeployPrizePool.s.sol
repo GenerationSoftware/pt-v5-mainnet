@@ -10,8 +10,8 @@ import { ud2x18 } from "prb-math/UD2x18.sol";
 import { sd1x18 } from "prb-math/SD1x18.sol";
 
 import { ClaimerFactory } from "pt-v5-claimer/ClaimerFactory.sol";
-import { TpdaLiquidationPairFactory } from "pt-v5-cgda-liquidator/TpdaLiquidationPairFactory.sol";
-import { TpdaLiquidationRouter } from "pt-v5-cgda-liquidator/TpdaLiquidationRouter.sol";
+import { TpdaLiquidationPairFactory } from "pt-v5-tpda-liquidator/TpdaLiquidationPairFactory.sol";
+import { TpdaLiquidationRouter } from "pt-v5-tpda-liquidator/TpdaLiquidationRouter.sol";
 import { DrawManager } from "pt-v5-draw-manager/DrawManager.sol";
 import { RngWitnet } from "pt-v5-rng-witnet/RngWitnet.sol";
 import { PrizePool, ConstructorParams, SD59x18 } from "pt-v5-prize-pool/PrizePool.sol";
@@ -71,7 +71,7 @@ contract DeployPrizePool is ScriptBase {
             config.rewardBurnerBurnToken,
             address(config.prizeToken),
             config.rewardBurnerTargetAuctionPeriod,
-            config.rewardBurnerInitialAuctionPrice
+            config.rewardBurnerInitialAuctionPrice,
             config.rewardBurnerSmoothingFactor
         );
 
@@ -96,7 +96,7 @@ contract DeployPrizePool is ScriptBase {
             prizePool,
             config.claimerMinFee,
             config.claimerMaxFee,
-            (config.drawPeriodSeconds - (2 * config.drawAuctionDuration)) / 2;,
+            (config.drawPeriodSeconds - (2 * config.drawAuctionDuration)) / 2,
             config.claimerMaxFeePercent
         );
 
