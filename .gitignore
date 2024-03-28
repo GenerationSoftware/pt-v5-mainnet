@@ -8,14 +8,16 @@ out/
 broadcast/*
 
 # Ignores local deployments
-deployments/local/*
+deployments/localhost/*
 
 .DS_Store
-.envrc
 node_modules
 
 # VS Code history
 .history
+
+# Secrets
+.envrc
 .env
 
 # Generated Docs

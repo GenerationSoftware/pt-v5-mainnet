@@ -1,0 +1,38 @@
+{
+    "prize_pool": {
+        "tier_liquidity_utilization_rate": "",
+        "draw_period_seconds": "",
+        "first_draw_starts_in": "",
+        "grand_prize_period_draws": "",
+        "number_of_tiers": "",
+        "tier_shares": "",
+        "canary_shares": "",
+        "reserve_shares": "",
+        "draw_timeout": "",
+        "prize_token": ""
+    },
+
+    "reward_burner": {
+        "burn_token": "",
+        "target_auction_period": "",
+        "initial_auction_price": "",
+        "smoothing_factor": ""
+    },
+        
+    "rng": {
+        "witnet_randomness_v2": ""
+    },
+
+    "draw_manager": {
+        "draw_auction_duration": "",
+        "draw_auction_target_sale_time": "",
+        "draw_auction_target_first_sale_fraction": "",
+        "draw_auction_max_reward": ""
+    },
+
+    "claimer": {
+        "min_fee": "",
+        "max_fee": "",
+        "max_fee_percent": ""
+    }
+}

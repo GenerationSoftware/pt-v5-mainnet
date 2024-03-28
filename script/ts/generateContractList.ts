@@ -61,7 +61,7 @@ export const generateContractList = (
   deploymentPaths: string[]
 ): ContractList => {
   const contractList: ContractList = {
-    name: "Hyperstructure Testnet",
+    name: "PoolTogether V5",
     version: PACKAGE_VERSION,
     timestamp: new Date().toISOString(),
     contracts: [],
@@ -70,16 +70,12 @@ export const generateContractList = (
   // Map to reference deployed contract names by address
   const contractAddressToName = new Map<string, string>();
 
-  const { transactions: stableTokenTransactions } = getBlob(deploymentPaths[0]);
-  let tokenTransactions = [];
-  if (deploymentPaths[1]) {
-    let { transactions } = getBlob(deploymentPaths[1]);
-    tokenTransactions = transactions;
-  }
-
-  tokenTransactions = stableTokenTransactions.concat(tokenTransactions);
-
-  deploymentPaths.forEach((deploymentPath) => {
+  for (let i = 0; i < deploymentPaths.length; i++) {
+    const deploymentPath = deploymentPaths[i];
+    if (!fs.existsSync(deploymentPath)) {
+      console.log("Skipping path", deploymentPath);
+      continue;
+    };
     const deploymentBlob = getBlob(deploymentPath);
     const chainId = deploymentBlob.chain;
     const transactions = deploymentBlob.transactions;
@@ -130,7 +126,7 @@ export const generateContractList = (
         }
       }
     );
-  });
+  };
 
   return contractList;
 };
@@ -173,7 +169,7 @@ export const generateVaultList = (
   contractList: ContractList
 ): VaultList => {
   const vaultList: VaultList = {
-    name: "PoolTogether Testnet Vault List",
+    name: "PoolTogether V5 Vault List",
     keywords: ["pooltogether"],
     version: PACKAGE_VERSION,
     timestamp: new Date().toISOString(),
@@ -227,13 +223,8 @@ function stripQuotes(str) {
 
 export function getDeploymentPaths(chainId: number) {
   return [
-    `${rootFolder}/broadcast/DeployStableToken.s.sol/${chainId}`,
-    `${rootFolder}/broadcast/DeployToken.s.sol/${chainId}`,
-    `${rootFolder}/broadcast/DeployPool.s.sol/${chainId}`,
-    `${rootFolder}/broadcast/DeployYieldVault.s.sol/${chainId}`,
-    `${rootFolder}/broadcast/DeployTwabDelegator.s.sol/${chainId}`,
-    `${rootFolder}/broadcast/DeployTwabRewards.s.sol/${chainId}`,
-    `${rootFolder}/broadcast/DeployVault.s.sol/${chainId}`,
+    `${rootFolder}/broadcast/DeployPrizePool.s.sol/${chainId}`,
+    `${rootFolder}/broadcast/DeployAaveV3Factory.s.sol/${chainId}`,
   ];
 }
 
