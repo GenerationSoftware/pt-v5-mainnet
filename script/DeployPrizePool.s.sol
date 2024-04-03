@@ -27,13 +27,13 @@ import { StakingVault, IERC20 as StakingVaultIERC20 } from "pt-v5-staking-vault/
 contract DeployPrizePool is ScriptBase {
     using SafeCast for uint256;
 
-    Configuration public config;
-    IRng public standardizedRng;
-    PrizePool public prizePool;
-    TwabController public twabController;
-    TpdaLiquidationPairFactory public liquidationPairFactory;
-    PrizeVault public stakingPrizeVault;
-    address public claimer;
+    Configuration internal config;
+    IRng internal standardizedRng;
+    PrizePool internal prizePool;
+    TwabController internal twabController;
+    TpdaLiquidationPairFactory internal liquidationPairFactory;
+    PrizeVault internal stakingPrizeVault;
+    address internal claimer;
 
     constructor() {
         config = loadConfig(vm.envString("CONFIG"));
