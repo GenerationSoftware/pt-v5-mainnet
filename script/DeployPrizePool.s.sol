@@ -29,6 +29,10 @@ contract DeployPrizePool is ScriptBase {
 
     Configuration public config;
     IRng public standardizedRng;
+    PrizePool public prizePool;
+    TwabController public twabController;
+    TpdaLiquidationPairFactory public liquidationPairFactory;
+    PrizeVault public stakingPrizeVault;
 
     constructor() {
         config = loadConfig(vm.envString("CONFIG"));
@@ -55,7 +59,7 @@ contract DeployPrizePool is ScriptBase {
     function deployCore() public {
         uint48 firstDrawStartsAt = uint48(block.timestamp + config.firstDrawStartsIn);
 
-        TwabController twabController = new TwabController(
+        twabController = new TwabController(
             config.twabPeriodLength,
             (firstDrawStartsAt - 
                 ((firstDrawStartsAt - block.timestamp) / config.twabPeriodLength + 1) * config.twabPeriodLength
@@ -63,11 +67,11 @@ contract DeployPrizePool is ScriptBase {
         );
         new TwabRewards(twabController);
 
-        TpdaLiquidationPairFactory liquidationPairFactory = new TpdaLiquidationPairFactory();
+        liquidationPairFactory = new TpdaLiquidationPairFactory();
         new TpdaLiquidationRouter(liquidationPairFactory);
         new PrizeVaultFactory();
 
-        PrizePool prizePool = new PrizePool(
+        prizePool = new PrizePool(
             ConstructorParams(
                 IERC20(config.prizeToken),
                 twabController,
@@ -92,7 +96,7 @@ contract DeployPrizePool is ScriptBase {
         ));
 
         StakingVault stakingVault = new StakingVault(config.stakingVaultName, config.stakingVaultSymbol, StakingVaultIERC20(config.stakedAsset));
-        PrizeVault stakingPrizeVault = new PrizeVault(
+        stakingPrizeVault = new PrizeVault(
             config.stakingPrizeVaultName,
             config.stakingPrizeVaultSymbol,
             IERC4626(address(stakingVault)),
