@@ -19,6 +19,7 @@ import { RngWitnet, IWitnetRandomness } from "pt-v5-rng-witnet/RngWitnet.sol";
 import { IRng } from "pt-v5-draw-manager/interfaces/IRng.sol";
 import { PrizePool, ConstructorParams, SD59x18 } from "pt-v5-prize-pool/PrizePool.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
+import { TwabRewards } from "pt-v5-twab-rewards/TwabRewards.sol";
 import { PrizeVaultFactory } from "pt-v5-vault/PrizeVaultFactory.sol";
 import { PrizeVault, IERC4626 } from "pt-v5-vault/PrizeVault.sol";
 import { StakingVault, IERC20 as StakingVaultIERC20 } from "pt-v5-staking-vault/StakingVault.sol";
@@ -60,6 +61,7 @@ contract DeployPrizePool is ScriptBase {
                 ((firstDrawStartsAt - block.timestamp) / config.twabPeriodLength + 1) * config.twabPeriodLength
             ).toUint32()
         );
+        new TwabRewards(twabController);
 
         TpdaLiquidationPairFactory liquidationPairFactory = new TpdaLiquidationPairFactory();
         new TpdaLiquidationRouter(liquidationPairFactory);
