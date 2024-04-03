@@ -33,6 +33,7 @@ contract DeployPrizePool is ScriptBase {
     TwabController public twabController;
     TpdaLiquidationPairFactory public liquidationPairFactory;
     PrizeVault public stakingPrizeVault;
+    address public claimer;
 
     constructor() {
         config = loadConfig(vm.envString("CONFIG"));
