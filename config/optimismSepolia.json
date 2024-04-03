@@ -25,7 +25,8 @@
     },
         
     "rng": {
-        "witnet_randomness_v2": "0xc0ffee84FD3B533C3fA408c993F59828395319A1"
+        "contract": "0xc0ffee84FD3B533C3fA408c993F59828395319A1",
+        "type": "witnet-randomness-v2"
     },
 
     "draw_manager": {

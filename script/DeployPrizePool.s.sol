@@ -27,6 +27,7 @@ contract DeployPrizePool is ScriptBase {
     using SafeCast for uint256;
 
     Configuration config;
+    IRng standardizedRng;
 
     constructor() {
         config = loadConfig(vm.envString("CONFIG"));
@@ -35,6 +36,22 @@ contract DeployPrizePool is ScriptBase {
     function run() public {
         vm.startBroadcast();
 
+        if (keccak256(bytes(config.rngType)) == keccak256("witnet-randomness-v2")) {
+            /// WITNET
+            standardizedRng = new RngWitnet(IWitnetRandomness(config.rng));
+        } else if (keccak256(bytes(config.rngType)) == keccak256("standardized")){
+            /// STANDARDIZED
+            standardizedRng = IRng(config.rng);
+        } else {
+            revert("Unknown RNG type...");
+        }
+
+        deploy();
+
+        vm.stopBroadcast();
+    }
+
+    function deploy() public {
         uint48 firstDrawStartsAt = uint48(block.timestamp + config.firstDrawStartsIn);
 
         TwabController twabController = new TwabController(
@@ -47,8 +64,6 @@ contract DeployPrizePool is ScriptBase {
         TpdaLiquidationPairFactory liquidationPairFactory = new TpdaLiquidationPairFactory();
         new TpdaLiquidationRouter(liquidationPairFactory);
         new PrizeVaultFactory();
-
-        IRng rng = new RngWitnet(IWitnetRandomness(config.witnetRandomnessV2));
 
         PrizePool prizePool = new PrizePool(
             ConstructorParams(
@@ -90,7 +105,7 @@ contract DeployPrizePool is ScriptBase {
 
         DrawManager drawManager = new DrawManager(
             prizePool,
-            rng,
+            standardizedRng,
             config.drawAuctionDuration,
             config.drawAuctionTargetSaleTime,
             config.drawAuctionTargetFirstSaleFraction,
@@ -100,7 +115,5 @@ contract DeployPrizePool is ScriptBase {
         );
 
         prizePool.setDrawManager(address(drawManager));
-
-        vm.stopBroadcast();
     }
 }

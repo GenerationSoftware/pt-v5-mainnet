@@ -25,7 +25,8 @@
     },
         
     "rng": {
-        "witnet_randomness_v2": ""
+        "contract": "",
+        "type": "witnet-randomness-v2"
     },
 
     "draw_manager": {

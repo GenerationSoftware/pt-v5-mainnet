@@ -30,7 +30,8 @@ struct Configuration {
     string stakingPrizeVaultSymbol;
     
     // RNG
-    address witnetRandomnessV2;
+    address rng;
+    string rngType;
     
     // Draw Manager config
     uint48 drawAuctionDuration;
@@ -73,7 +74,8 @@ contract ScriptBase is Script {
         config.stakingPrizeVaultSymbol              = vm.parseJsonString(file, "$.stake_to_win.prize_vault.symbol");
         
         // RNG
-        config.witnetRandomnessV2                   = vm.parseJsonAddress(file, "$.rng.witnet_randomness_v2");
+        config.rng                                  = vm.parseJsonAddress(file, "$.rng.contract");
+        config.rngType                              = vm.parseJsonString(file, "$.rng.type");
         
         // Draw Manager config
         config.drawAuctionDuration                  = vm.parseJsonUint(file, "$.draw_manager.draw_auction_duration").toUint48();
