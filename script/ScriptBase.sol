@@ -22,11 +22,12 @@ struct Configuration {
     uint24 drawTimeout;
     address prizeToken;
 
-    // Reward Burner
-    address rewardBurnerBurnToken;
-    uint64 rewardBurnerTargetAuctionPeriod;
-    uint192 rewardBurnerInitialAuctionPrice;
-    uint256 rewardBurnerSmoothingFactor;
+    // Stake to Win Vault
+    address stakedAsset;
+    string stakingVaultName;
+    string stakingVaultSymbol;
+    string stakingPrizeVaultName;
+    string stakingPrizeVaultSymbol;
     
     // RNG
     address witnetRandomnessV2;
@@ -64,11 +65,12 @@ contract ScriptBase is Script {
         config.drawTimeout                          = vm.parseJsonUint(file, "$.prize_pool.draw_timeout").toUint24();
         config.prizeToken                           = vm.parseJsonAddress(file, "$.prize_pool.prize_token");
 
-        // Reward Burner
-        config.rewardBurnerBurnToken                = vm.parseJsonAddress(file, "$.reward_burner.burn_token");
-        config.rewardBurnerTargetAuctionPeriod      = vm.parseJsonUint(file, "$.reward_burner.target_auction_period").toUint64();
-        config.rewardBurnerInitialAuctionPrice      = vm.parseJsonUint(file, "$.reward_burner.initial_auction_price").toUint192();
-        config.rewardBurnerSmoothingFactor          = vm.parseJsonUint(file, "$.reward_burner.smoothing_factor");
+        // Stake to Win Vault
+        config.stakedAsset                          = vm.parseJsonAddress(file, "$.stake_to_win.staking_vault.asset");
+        config.stakingVaultName                     = vm.parseJsonString(file, "$.stake_to_win.staking_vault.name");
+        config.stakingVaultSymbol                   = vm.parseJsonString(file, "$.stake_to_win.staking_vault.symbol");
+        config.stakingPrizeVaultName                = vm.parseJsonString(file, "$.stake_to_win.prize_vault.name");
+        config.stakingPrizeVaultSymbol              = vm.parseJsonString(file, "$.stake_to_win.prize_vault.symbol");
         
         // RNG
         config.witnetRandomnessV2                   = vm.parseJsonAddress(file, "$.rng.witnet_randomness_v2");
@@ -80,8 +82,6 @@ contract ScriptBase is Script {
         config.drawAuctionMaxReward                 = vm.parseJsonUint(file, "$.draw_manager.draw_auction_max_reward");
 
         // Claimer config
-        config.claimerMinFee                        = vm.parseJsonUint(file, "$.claimer.min_fee");
-        config.claimerMaxFee                        = vm.parseJsonUint(file, "$.claimer.max_fee");
         config.claimerMaxFeePercent                 = ud2x18(vm.parseJsonUint(file, "$.claimer.max_fee_percent").toUint64());
     }
 

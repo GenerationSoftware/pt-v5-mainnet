@@ -12,23 +12,15 @@
 [submodule "lib/pt-v5-prize-pool"]
 	path = lib/pt-v5-prize-pool
 	url = https://github.com/generationsoftware/pt-v5-prize-pool
-	branch = prod-deploy-2
 [submodule "lib/pt-v5-claimer"]
 	path = lib/pt-v5-claimer
 	url = https://github.com/generationsoftware/pt-v5-claimer
-	branch = prod-deploy-2
 [submodule "lib/pt-v5-twab-controller"]
 	path = lib/pt-v5-twab-controller
 	url = https://github.com/generationsoftware/pt-v5-twab-controller
-	branch = prod-deploy-2
-[submodule "lib/pt-v5-vault-boost"]
-	path = lib/pt-v5-vault-boost
-	url = https://github.com/generationsoftware/pt-v5-vault-boost
-	branch = prod-deploy-2
 [submodule "lib/pt-v5-twab-rewards"]
 	path = lib/pt-v5-twab-rewards
 	url = https://github.com/GenerationSoftware/pt-v5-twab-rewards
-	branch = prod-deploy-2
 [submodule "lib/pt-v5-rng-witnet"]
 	path = lib/pt-v5-rng-witnet
 	url = https://github.com/GenerationSoftware/pt-v5-rng-witnet
@@ -41,6 +33,6 @@
 [submodule "lib/pt-v5-vault"]
 	path = lib/pt-v5-vault
 	url = https://github.com/generationsoftware/pt-v5-vault
-[submodule "lib/pt-v5-reward-burner"]
-	path = lib/pt-v5-reward-burner
-	url = https://github.com/generationsoftware/pt-v5-reward-burner
+[submodule "lib/pt-v5-staking-vault"]
+	path = lib/pt-v5-staking-vault
+	url = https://github.com/GenerationSoftware/pt-v5-staking-vault
