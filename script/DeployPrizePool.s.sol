@@ -26,14 +26,14 @@ import { StakingVault, IERC20 as StakingVaultIERC20 } from "pt-v5-staking-vault/
 contract DeployPrizePool is ScriptBase {
     using SafeCast for uint256;
 
-    Configuration config;
-    IRng standardizedRng;
+    Configuration public config;
+    IRng public standardizedRng;
 
     constructor() {
         config = loadConfig(vm.envString("CONFIG"));
     }
 
-    function run() public {
+    function run() public virtual {
         vm.startBroadcast();
 
         if (keccak256(bytes(config.rngType)) == keccak256("witnet-randomness-v2")) {
@@ -46,12 +46,12 @@ contract DeployPrizePool is ScriptBase {
             revert("Unknown RNG type...");
         }
 
-        deploy();
+        deployCore();
 
         vm.stopBroadcast();
     }
 
-    function deploy() public {
+    function deployCore() public {
         uint48 firstDrawStartsAt = uint48(block.timestamp + config.firstDrawStartsIn);
 
         TwabController twabController = new TwabController(
