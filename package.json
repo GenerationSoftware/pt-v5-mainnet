@@ -18,7 +18,6 @@
     "----------CHAIN-COMMANDS----------": "",
     "deploy:localhost": "CONFIG=config/localhost.json SCRIPT_RPC_URL=http://localhost:8545 SCRIPT_PRIVATE_KEY=$LOCAL_PRIVATE_KEY SCRIPT_SENDER=$LOCAL_SENDER SCRIPT_PRIORITY_GAS_PRICE=100000 npm run script:pool",
     "deploy:optimism": "CONFIG=config/optimism.json SCRIPT_RPC_URL=$OPTIMISM_RPC_URL SCRIPT_PRIVATE_KEY=$PRIVATE_KEY SCRIPT_SENDER=$SENDER SCRIPT_VERIFY=--verify SCRIPT_ETHERSCAN=\"--etherscan-api-key $OPTIMISM_ETHERSCAN_API_KEY\" SCRIPT_PRIORITY_GAS_PRICE=100000 yarn script:pool",
-    "deploy:optimismSepolia": "CONFIG=config/optimismSepolia.json SCRIPT_RPC_URL=$OPTIMISM_SEPOLIA_RPC_URL SCRIPT_PRIVATE_KEY=$PRIVATE_KEY SCRIPT_SENDER=$SENDER SCRIPT_VERIFY=--verify SCRIPT_ETHERSCAN=\"--etherscan-api-key $OPTIMISM_ETHERSCAN_API_KEY\" SCRIPT_PRIORITY_GAS_PRICE=100000 yarn script:pool",
     "----------ARTIFACT-COMMANDS----------": "",
     "gen:deployments": "ts-node ./script/ts/generateDeployments.ts"
   },
