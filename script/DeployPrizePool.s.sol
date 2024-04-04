@@ -19,37 +19,60 @@ import { RngWitnet, IWitnetRandomness } from "pt-v5-rng-witnet/RngWitnet.sol";
 import { IRng } from "pt-v5-draw-manager/interfaces/IRng.sol";
 import { PrizePool, ConstructorParams, SD59x18 } from "pt-v5-prize-pool/PrizePool.sol";
 import { TwabController } from "pt-v5-twab-controller/TwabController.sol";
+import { TwabRewards } from "pt-v5-twab-rewards/TwabRewards.sol";
 import { PrizeVaultFactory } from "pt-v5-vault/PrizeVaultFactory.sol";
-import { RewardBurner } from "pt-v5-reward-burner/RewardBurner.sol";
+import { PrizeVault, IERC4626 } from "pt-v5-vault/PrizeVault.sol";
+import { StakingVault, IERC20 as StakingVaultIERC20 } from "pt-v5-staking-vault/StakingVault.sol";
 
 contract DeployPrizePool is ScriptBase {
     using SafeCast for uint256;
 
-    Configuration config;
+    Configuration internal config;
+    IRng internal standardizedRng;
+    PrizePool internal prizePool;
+    TwabController internal twabController;
+    TpdaLiquidationPairFactory internal liquidationPairFactory;
+    PrizeVault internal stakingPrizeVault;
+    address internal claimer;
 
     constructor() {
         config = loadConfig(vm.envString("CONFIG"));
     }
 
-    function run() public {
+    function run() public virtual {
         vm.startBroadcast();
 
+        if (keccak256(bytes(config.rngType)) == keccak256("witnet-randomness-v2")) {
+            /// WITNET
+            standardizedRng = new RngWitnet(IWitnetRandomness(config.rng));
+        } else if (keccak256(bytes(config.rngType)) == keccak256("standardized")){
+            /// STANDARDIZED
+            standardizedRng = IRng(config.rng);
+        } else {
+            revert("Unknown RNG type...");
+        }
+
+        deployCore();
+
+        vm.stopBroadcast();
+    }
+
+    function deployCore() public {
         uint48 firstDrawStartsAt = uint48(block.timestamp + config.firstDrawStartsIn);
 
-        TwabController twabController = new TwabController(
+        twabController = new TwabController(
             config.twabPeriodLength,
             (firstDrawStartsAt - 
                 ((firstDrawStartsAt - block.timestamp) / config.twabPeriodLength + 1) * config.twabPeriodLength
             ).toUint32()
         );
+        new TwabRewards(twabController);
 
-        TpdaLiquidationPairFactory liquidationPairFactory = new TpdaLiquidationPairFactory();
+        liquidationPairFactory = new TpdaLiquidationPairFactory();
         new TpdaLiquidationRouter(liquidationPairFactory);
         new PrizeVaultFactory();
 
-        IRng rng = new RngWitnet(IWitnetRandomness(config.witnetRandomnessV2));
-
-        PrizePool prizePool = new PrizePool(
+        prizePool = new PrizePool(
             ConstructorParams(
                 IERC20(config.prizeToken),
                 twabController,
@@ -66,45 +89,38 @@ contract DeployPrizePool is ScriptBase {
             )
         );
 
-        RewardBurner rewardBurnerPair = new RewardBurner(
+        ClaimerFactory claimerFactory = new ClaimerFactory();
+        claimer = address(claimerFactory.createClaimer(
             prizePool,
-            msg.sender
-        );
+            (config.drawPeriodSeconds - (2 * config.drawAuctionDuration)) / 2,
+            config.claimerMaxFeePercent
+        ));
 
-        TpdaLiquidationPair rewardBurnerPairPair = liquidationPairFactory.createPair(
-            rewardBurnerPair,
-            config.rewardBurnerBurnToken,
-            address(config.prizeToken),
-            config.rewardBurnerTargetAuctionPeriod,
-            config.rewardBurnerInitialAuctionPrice,
-            config.rewardBurnerSmoothingFactor
+        StakingVault stakingVault = new StakingVault(config.stakingVaultName, config.stakingVaultSymbol, StakingVaultIERC20(config.stakedAsset));
+        stakingPrizeVault = new PrizeVault(
+            config.stakingPrizeVaultName,
+            config.stakingPrizeVaultSymbol,
+            IERC4626(address(stakingVault)),
+            prizePool,
+            address(claimer),
+            address(0), // no yield fee recipient
+            0, // 0 yield fee %
+            0, // 0 yield buffer
+            address(msg.sender) // temporary owner, but we renounce on the next call
         );
-
-        rewardBurnerPair.setLiquidationPair(address(rewardBurnerPairPair));
+        stakingPrizeVault.renounceOwnership();
 
         DrawManager drawManager = new DrawManager(
             prizePool,
-            rng,
+            standardizedRng,
             config.drawAuctionDuration,
             config.drawAuctionTargetSaleTime,
             config.drawAuctionTargetFirstSaleFraction,
             config.drawAuctionTargetFirstSaleFraction,
             config.drawAuctionMaxReward,
-            address(rewardBurnerPair)
+            address(stakingPrizeVault)
         );
 
         prizePool.setDrawManager(address(drawManager));
-
-        ClaimerFactory claimerFactory = new ClaimerFactory();
-
-        claimerFactory.createClaimer(
-            prizePool,
-            config.claimerMinFee,
-            config.claimerMaxFee,
-            (config.drawPeriodSeconds - (2 * config.drawAuctionDuration)) / 2,
-            config.claimerMaxFeePercent
-        );
-
-        vm.stopBroadcast();
     }
 }

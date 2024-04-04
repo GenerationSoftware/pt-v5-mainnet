@@ -12,15 +12,21 @@
         "prize_token": ""
     },
 
-    "reward_burner": {
-        "burn_token": "",
-        "target_auction_period": "",
-        "initial_auction_price": "",
-        "smoothing_factor": ""
+    "stake_to_win": {
+        "staking_vault": {
+            "asset": "",
+            "name": "Staked POOL",
+            "symbol": "sPOOL"
+        },
+        "prize_vault": {
+            "name": "Prize POOL",
+            "symbol": "pPOOL"
+        }
     },
         
     "rng": {
-        "witnet_randomness_v2": ""
+        "contract": "",
+        "type": "witnet-randomness-v2"
     },
 
     "draw_manager": {
@@ -31,8 +37,6 @@
     },
 
     "claimer": {
-        "min_fee": "",
-        "max_fee": "",
         "max_fee_percent": ""
     }
 }
