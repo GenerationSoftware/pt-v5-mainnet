@@ -62,7 +62,7 @@ contract DeployPrizePool is ScriptBase {
 
         twabController = new TwabController(
             config.twabPeriodLength,
-            (firstDrawStartsAt - 
+            (firstDrawStartsAt -
                 ((firstDrawStartsAt - block.timestamp) / config.twabPeriodLength + 1) * config.twabPeriodLength
             ).toUint32()
         );
