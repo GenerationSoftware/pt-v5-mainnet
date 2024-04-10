@@ -33,6 +33,11 @@ contract DeployPrizePool is ScriptBase {
     TwabController internal twabController;
     TpdaLiquidationPairFactory internal liquidationPairFactory;
     PrizeVault internal stakingPrizeVault;
+    DrawManager internal drawManager;
+    ClaimerFactory internal claimerFactory;
+    StakingVault internal stakingVault;
+    PrizeVaultFactory internal prizeVaultFactory;
+    TpdaLiquidationRouter internal tpdaLiquidationRouter;
     address internal claimer;
 
     constructor() {
@@ -69,8 +74,8 @@ contract DeployPrizePool is ScriptBase {
         new TwabRewards(twabController);
 
         liquidationPairFactory = new TpdaLiquidationPairFactory();
-        new TpdaLiquidationRouter(liquidationPairFactory);
-        new PrizeVaultFactory();
+        tpdaLiquidationRouter = new TpdaLiquidationRouter(liquidationPairFactory);
+        prizeVaultFactory = new PrizeVaultFactory();
 
         prizePool = new PrizePool(
             ConstructorParams(
@@ -89,14 +94,14 @@ contract DeployPrizePool is ScriptBase {
             )
         );
 
-        ClaimerFactory claimerFactory = new ClaimerFactory();
+        claimerFactory = new ClaimerFactory();
         claimer = address(claimerFactory.createClaimer(
             prizePool,
             config.claimerTimeToReachMaxFee,
             config.claimerMaxFeePercent
         ));
 
-        StakingVault stakingVault = new StakingVault(config.stakingVaultName, config.stakingVaultSymbol, StakingVaultIERC20(config.stakedAsset));
+        stakingVault = new StakingVault(config.stakingVaultName, config.stakingVaultSymbol, StakingVaultIERC20(config.stakedAsset));
         stakingPrizeVault = new PrizeVault(
             config.stakingPrizeVaultName,
             config.stakingPrizeVaultSymbol,
@@ -110,7 +115,7 @@ contract DeployPrizePool is ScriptBase {
         );
         stakingPrizeVault.renounceOwnership();
 
-        DrawManager drawManager = new DrawManager(
+        drawManager = new DrawManager(
             prizePool,
             standardizedRng,
             config.drawAuctionDuration,
