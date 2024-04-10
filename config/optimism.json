@@ -37,6 +37,7 @@
     },
 
     "claimer": {
+        "time_to_reach_max_fee": "",
         "max_fee_percent": ""
     }
 }

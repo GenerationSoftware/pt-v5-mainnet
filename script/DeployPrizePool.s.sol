@@ -92,7 +92,7 @@ contract DeployPrizePool is ScriptBase {
         ClaimerFactory claimerFactory = new ClaimerFactory();
         claimer = address(claimerFactory.createClaimer(
             prizePool,
-            (config.drawPeriodSeconds - (2 * config.drawAuctionDuration)) / 2,
+            config.claimerTimeToReachMaxFee,
             config.claimerMaxFeePercent
         ));
 
