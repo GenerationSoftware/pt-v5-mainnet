@@ -33,7 +33,8 @@
         "draw_auction_duration": "",
         "draw_auction_target_sale_time": "",
         "draw_auction_target_first_sale_fraction": "",
-        "draw_auction_max_reward": ""
+        "draw_auction_max_reward": "",
+        "draw_auction_max_retries": "2"
     },
 
     "claimer": {

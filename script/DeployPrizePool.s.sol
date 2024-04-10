@@ -118,6 +118,7 @@ contract DeployPrizePool is ScriptBase {
             config.drawAuctionTargetFirstSaleFraction,
             config.drawAuctionTargetFirstSaleFraction,
             config.drawAuctionMaxReward,
+            config.drawAuctionMaxRetries,
             address(stakingPrizeVault)
         );
 
