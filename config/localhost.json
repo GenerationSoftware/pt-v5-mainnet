@@ -37,6 +37,7 @@
     },
 
     "claimer": {
+        "time_to_reach_max_fee": "28800",
         "max_fee_percent": "100000000000000000"
     }
 }

@@ -40,8 +40,7 @@ struct Configuration {
     uint256 drawAuctionMaxReward;
 
     // Claimer config
-    uint256 claimerMinFee;
-    uint256 claimerMaxFee;
+    uint256 claimerTimeToReachMaxFee;
     UD2x18 claimerMaxFeePercent;
 }
 
@@ -84,6 +83,7 @@ contract ScriptBase is Script {
         config.drawAuctionMaxReward                 = vm.parseJsonUint(file, "$.draw_manager.draw_auction_max_reward");
 
         // Claimer config
+        config.claimerTimeToReachMaxFee             = vm.parseJsonUint(file, "$.claimer.time_to_reach_max_fee");
         config.claimerMaxFeePercent                 = ud2x18(vm.parseJsonUint(file, "$.claimer.max_fee_percent").toUint64());
     }
 

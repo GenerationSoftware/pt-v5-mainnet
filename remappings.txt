@@ -14,3 +14,4 @@ pt-v5-twab-rewards/=lib/pt-v5-twab-rewards/src/
 pt-v5-vault/=lib/pt-v5-vault/src/
 pt-v5-staking-vault/=lib/pt-v5-staking-vault/src/
 yield-daddy/=lib/yield-daddy/src/
+solmate/=lib/yield-daddy/lib/solmate/src/

@@ -15,6 +15,7 @@
 [submodule "lib/pt-v5-claimer"]
 	path = lib/pt-v5-claimer
 	url = https://github.com/generationsoftware/pt-v5-claimer
+	branch = gen-1289-update-claimer-to-use-daily-prize-tier-as-max-fee-param
 [submodule "lib/pt-v5-twab-controller"]
 	path = lib/pt-v5-twab-controller
 	url = https://github.com/generationsoftware/pt-v5-twab-controller
