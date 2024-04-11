@@ -38,6 +38,7 @@ struct Configuration {
     uint48 drawAuctionTargetSaleTime;
     UD2x18 drawAuctionTargetFirstSaleFraction;
     uint256 drawAuctionMaxReward;
+    uint256 drawAuctionMaxRetries;
 
     // Claimer config
     uint256 claimerTimeToReachMaxFee;
@@ -81,6 +82,7 @@ contract ScriptBase is Script {
         config.drawAuctionTargetSaleTime            = vm.parseJsonUint(file, "$.draw_manager.draw_auction_target_sale_time").toUint48();
         config.drawAuctionTargetFirstSaleFraction   = ud2x18(vm.parseJsonUint(file, "$.draw_manager.draw_auction_target_first_sale_fraction").toUint64());
         config.drawAuctionMaxReward                 = vm.parseJsonUint(file, "$.draw_manager.draw_auction_max_reward");
+        config.drawAuctionMaxRetries                = vm.parseJsonUint(file, "$.draw_manager.draw_auction_max_retries");
 
         // Claimer config
         config.claimerTimeToReachMaxFee             = vm.parseJsonUint(file, "$.claimer.time_to_reach_max_fee");
