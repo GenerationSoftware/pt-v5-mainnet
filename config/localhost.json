@@ -7,7 +7,7 @@
         "number_of_tiers": "4",
         "tier_shares": "100",
         "canary_shares": "4",
-        "reserve_shares": "40",
+        "reserve_shares": "30",
         "draw_timeout": "60",
         "prize_token": "0x395Ae52bB17aef68C2888d941736A71dC6d4e125"
     },
