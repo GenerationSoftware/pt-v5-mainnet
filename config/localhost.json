@@ -2,7 +2,7 @@
     "prize_pool": {
         "tier_liquidity_utilization_rate": "500000000000000000",
         "draw_period_seconds": "86400",
-        "first_draw_starts_in": "6000",
+        "first_draw_starts_at": "0",
         "grand_prize_period_draws": "91",
         "number_of_tiers": "4",
         "tier_shares": "100",

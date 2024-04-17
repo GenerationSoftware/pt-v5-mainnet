@@ -63,7 +63,7 @@ contract DeployPrizePool is ScriptBase {
     }
 
     function deployCore() public {
-        uint48 firstDrawStartsAt = uint48(block.timestamp + config.firstDrawStartsIn);
+        uint48 firstDrawStartsAt = config.firstDrawStartsAt;
 
         twabController = new TwabController(
             config.twabPeriodLength,

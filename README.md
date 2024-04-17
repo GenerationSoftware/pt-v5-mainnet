@@ -86,9 +86,9 @@ Generally, most L2 deployments are cheap enough for daily draws as long as there
 
 --------------------------------------------------------------------------------
 
-### `first_draw_starts_in`
+### `first_draw_starts_at`
 
-This parameter defines the relative start time of the first draw compared to the deployment time. For example, if this parameter is set to 600 seconds, and the prize pool is deployed at 6:15, then the first draw will open at 6:25.
+This parameter defines the absolute start timestamp of the first draw.
 
 --------------------------------------------------------------------------------
 

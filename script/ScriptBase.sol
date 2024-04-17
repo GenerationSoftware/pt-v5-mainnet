@@ -13,7 +13,7 @@ struct Configuration {
     // Prize Pool
     uint256 tierLiquidityUtilizationRate;
     uint32 drawPeriodSeconds;
-    uint48 firstDrawStartsIn;
+    uint48 firstDrawStartsAt;
     uint24 grandPrizePeriodDraws;
     uint8 numberOfTiers;
     uint8 tierShares;
@@ -57,7 +57,7 @@ contract ScriptBase is Script {
         // Prize Pool
         config.tierLiquidityUtilizationRate         = vm.parseJsonUint(file, "$.prize_pool.tier_liquidity_utilization_rate");
         config.drawPeriodSeconds                    = vm.parseJsonUint(file, "$.prize_pool.draw_period_seconds").toUint32();
-        config.firstDrawStartsIn                    = vm.parseJsonUint(file, "$.prize_pool.first_draw_starts_in").toUint48();
+        config.firstDrawStartsAt                    = vm.parseJsonUint(file, "$.prize_pool.first_draw_starts_at").toUint48();
         config.grandPrizePeriodDraws                = vm.parseJsonUint(file, "$.prize_pool.grand_prize_period_draws").toUint24();
         config.numberOfTiers                        = vm.parseJsonUint(file, "$.prize_pool.number_of_tiers").toUint8();
         config.tierShares                           = vm.parseJsonUint(file, "$.prize_pool.tier_shares").toUint8();
