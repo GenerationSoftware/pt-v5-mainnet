@@ -2,60 +2,37 @@
 	path = lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
 	branch = v1
-[submodule "lib/aave-address-book"]
-	path = lib/aave-address-book
-	url = https://github.com/bgd-labs/aave-address-book
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/openzeppelin/openzeppelin-contracts
 	branch = release-v4.9
-[submodule "lib/solidity-stringutils"]
-	path = lib/solidity-stringutils
-	url = https://github.com/Arachnid/solidity-stringutils
 [submodule "lib/yield-daddy"]
 	path = lib/yield-daddy
 	url = https://github.com/timeless-fi/yield-daddy
-[submodule "lib/pt-v5-rng-contracts"]
-	path = lib/pt-v5-rng-contracts
-	url = https://github.com/generationsoftware/pt-v5-rng-contracts
-	branch = prod-deploy-2
-[submodule "lib/pt-v5-draw-auction"]
-	path = lib/pt-v5-draw-auction
-	url = https://github.com/generationsoftware/pt-v5-draw-auction
-	branch = prod-deploy-2
 [submodule "lib/pt-v5-prize-pool"]
 	path = lib/pt-v5-prize-pool
 	url = https://github.com/generationsoftware/pt-v5-prize-pool
-	branch = prod-deploy-2
-[submodule "lib/pt-v5-vault"]
-	path = lib/pt-v5-vault
-	url = https://github.com/generationsoftware/pt-v5-vault
-	branch = prod-deploy-2
-[submodule "lib/pt-v5-cgda-liquidator"]
-	path = lib/pt-v5-cgda-liquidator
-	url = https://github.com/generationsoftware/pt-v5-cgda-liquidator
-	branch = prod-deploy-2
 [submodule "lib/pt-v5-claimer"]
 	path = lib/pt-v5-claimer
 	url = https://github.com/generationsoftware/pt-v5-claimer
-	branch = prod-deploy-2
-[submodule "lib/pt-v5-chainlink-vrf-v2-direct"]
-	path = lib/pt-v5-chainlink-vrf-v2-direct
-	url = https://github.com/generationsoftware/pt-v5-chainlink-vrf-v2-direct
-	branch = prod-deploy-2
 [submodule "lib/pt-v5-twab-controller"]
 	path = lib/pt-v5-twab-controller
 	url = https://github.com/generationsoftware/pt-v5-twab-controller
-	branch = prod-deploy-2
-[submodule "lib/pt-v5-twab-delegator"]
-	path = lib/pt-v5-twab-delegator
-	url = https://github.com/generationsoftware/pt-v5-twab-delegator
-	branch = prod-deploy-2
-[submodule "lib/pt-v5-vault-boost"]
-	path = lib/pt-v5-vault-boost
-	url = https://github.com/generationsoftware/pt-v5-vault-boost
-	branch = prod-deploy-2
 [submodule "lib/pt-v5-twab-rewards"]
 	path = lib/pt-v5-twab-rewards
 	url = https://github.com/GenerationSoftware/pt-v5-twab-rewards
-	branch = prod-deploy-2
+[submodule "lib/pt-v5-rng-witnet"]
+	path = lib/pt-v5-rng-witnet
+	url = https://github.com/GenerationSoftware/pt-v5-rng-witnet
+[submodule "lib/pt-v5-draw-manager"]
+	path = lib/pt-v5-draw-manager
+	url = https://github.com/generationsoftware/pt-v5-draw-manager
+[submodule "lib/pt-v5-tpda-liquidator"]
+	path = lib/pt-v5-tpda-liquidator
+	url = https://github.com/generationsoftware/pt-v5-tpda-liquidator
+[submodule "lib/pt-v5-vault"]
+	path = lib/pt-v5-vault
+	url = https://github.com/generationsoftware/pt-v5-vault
+[submodule "lib/pt-v5-staking-vault"]
+	path = lib/pt-v5-staking-vault
+	url = https://github.com/GenerationSoftware/pt-v5-staking-vault

@@ -23,7 +23,7 @@ export type VaultExtensionValue = string | number | boolean | null | undefined;
 
 export interface VaultExtensions {
   underlyingAsset: {
-    address: `0x${string}`;
+    address: string;
     symbol: string;
     name: string;
   };
@@ -40,7 +40,7 @@ export interface VaultExtensions {
 
 export interface VaultInfo {
   chainId: number;
-  address: `0x${string}`;
+  address: string;
   name: string;
   decimals: number;
   symbol: string;

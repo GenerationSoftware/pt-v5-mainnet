@@ -1,0 +1,44 @@
+{
+    "prize_pool": {
+        "tier_liquidity_utilization_rate": "",
+        "draw_period_seconds": "",
+        "first_draw_starts_in": "",
+        "grand_prize_period_draws": "",
+        "number_of_tiers": "",
+        "tier_shares": "",
+        "canary_shares": "",
+        "reserve_shares": "",
+        "draw_timeout": "",
+        "prize_token": ""
+    },
+
+    "stake_to_win": {
+        "staking_vault": {
+            "asset": "",
+            "name": "Staked POOL",
+            "symbol": "sPOOL"
+        },
+        "prize_vault": {
+            "name": "Prize POOL",
+            "symbol": "pPOOL"
+        }
+    },
+        
+    "rng": {
+        "contract": "",
+        "type": "witnet-randomness-v2"
+    },
+
+    "draw_manager": {
+        "draw_auction_duration": "",
+        "draw_auction_target_sale_time": "",
+        "draw_auction_target_first_sale_fraction": "",
+        "draw_auction_max_reward": "",
+        "draw_auction_max_retries": "2"
+    },
+
+    "claimer": {
+        "time_to_reach_max_fee": "",
+        "max_fee_percent": ""
+    }
+}

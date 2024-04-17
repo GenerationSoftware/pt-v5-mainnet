@@ -1,0 +1,44 @@
+{
+    "prize_pool": {
+        "tier_liquidity_utilization_rate": "500000000000000000",
+        "draw_period_seconds": "86400",
+        "first_draw_starts_in": "6000",
+        "grand_prize_period_draws": "91",
+        "number_of_tiers": "4",
+        "tier_shares": "100",
+        "canary_shares": "4",
+        "reserve_shares": "30",
+        "draw_timeout": "60",
+        "prize_token": "0x395Ae52bB17aef68C2888d941736A71dC6d4e125"
+    },
+
+    "stake_to_win": {
+        "staking_vault": {
+            "asset": "0x395Ae52bB17aef68C2888d941736A71dC6d4e125",
+            "name": "Staked POOL",
+            "symbol": "sPOOL"
+        },
+        "prize_vault": {
+            "name": "Prize POOL",
+            "symbol": "pPOOL"
+        }
+    },
+        
+    "rng": {
+        "contract": "0x395Ae52bB17aef68C2888d941736A71dC6d4e125",
+        "type": "standardized"
+    },
+
+    "draw_manager": {
+        "draw_auction_duration": "14400",
+        "draw_auction_target_sale_time": "1800",
+        "draw_auction_target_first_sale_fraction": "10000000000000000",
+        "draw_auction_max_reward": "1000000000000000000",
+        "draw_auction_max_retries": "2"
+    },
+
+    "claimer": {
+        "time_to_reach_max_fee": "28800",
+        "max_fee_percent": "100000000000000000"
+    }
+}
