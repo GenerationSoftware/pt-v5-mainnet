@@ -164,42 +164,6 @@ export const findConstructorArguments = (deploymentPaths: string[], targetContra
   return result;
 };
 
-export const generateVaultList = (
-  deploymentPaths: string[],
-  contractList: ContractList
-): VaultList => {
-  const vaultList: VaultList = {
-    name: "PoolTogether V5 Vault List",
-    keywords: ["pooltogether"],
-    version: PACKAGE_VERSION,
-    timestamp: new Date().toISOString(),
-    tokens: [],
-  };
-
-  contractList.contracts.filter((contract) => contract.type === "PrizeVault").forEach((contract) => {
-    const args = findConstructorArguments(deploymentPaths, contract.address);
-    const yieldVaultAddress = args[2];
-    const assetAddress = findConstructorArguments(deploymentPaths, yieldVaultAddress)[0];
-    const assetArguments = findConstructorArguments(deploymentPaths, assetAddress);
-    vaultList.tokens.push({
-      chainId: contract.chainId,
-      address: contract.address,
-      name: stripQuotes(args[0]),
-      decimals: parseInt(assetArguments[2]),
-      symbol: stripQuotes(args[1]),
-      extensions: {
-        underlyingAsset: {
-          address: assetAddress,
-          symbol: stripQuotes(assetArguments[1]),
-          name: stripQuotes(assetArguments[0])
-        }
-      }
-    });
-  })
-
-  return vaultList;
-};
-
 export const writeList = (
   list: ContractList | VaultList,
   folderName: string,
@@ -242,14 +206,5 @@ export function writeFiles(chainId: number, chainName: string) {
     contractList,
     `deployments/${chainName}`,
     `contracts`
-  );
-  
-  writeList(
-    generateVaultList(
-      deploymentPaths,
-      contractList
-    ),
-    `deployments/${chainName}`,
-    `vaults`
   );
 }

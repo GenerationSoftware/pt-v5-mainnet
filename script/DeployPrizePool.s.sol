@@ -24,6 +24,22 @@ import { PrizeVaultFactory } from "pt-v5-vault/PrizeVaultFactory.sol";
 import { PrizeVault, IERC4626 } from "pt-v5-vault/PrizeVault.sol";
 import { StakingVault, IERC20 as StakingVaultIERC20 } from "pt-v5-staking-vault/StakingVault.sol";
 
+string constant addressBookPath = "config/addressBook.txt";
+
+struct CoreAddressBook {
+    IRng standardizedRng;
+    PrizePool prizePool;
+    TwabController twabController;
+    TpdaLiquidationPairFactory liquidationPairFactory;
+    PrizeVault stakingPrizeVault;
+    DrawManager drawManager;
+    ClaimerFactory claimerFactory;
+    StakingVault stakingVault;
+    PrizeVaultFactory prizeVaultFactory;
+    TpdaLiquidationRouter tpdaLiquidationRouter;
+    address claimer;
+}
+
 contract DeployPrizePool is ScriptBase {
     using SafeCast for uint256;
 
@@ -60,6 +76,28 @@ contract DeployPrizePool is ScriptBase {
         deployCore();
 
         vm.stopBroadcast();
+
+        // dump some addresses for the fork tests to use
+        vm.writeFile(
+            addressBookPath,
+            vm.toString(
+                abi.encode(
+                    CoreAddressBook({
+                        standardizedRng: standardizedRng,
+                        prizePool: prizePool,
+                        twabController: twabController,
+                        liquidationPairFactory: liquidationPairFactory,
+                        stakingPrizeVault: stakingPrizeVault,
+                        drawManager: drawManager,
+                        claimerFactory: claimerFactory,
+                        stakingVault: stakingVault,
+                        prizeVaultFactory: prizeVaultFactory,
+                        tpdaLiquidationRouter: tpdaLiquidationRouter,
+                        claimer: claimer
+                    })
+                )
+            )
+        );
     }
 
     function deployCore() public {
