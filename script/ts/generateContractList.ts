@@ -187,8 +187,7 @@ function stripQuotes(str) {
 
 export function getDeploymentPaths(chainId: number) {
   return [
-    `${rootFolder}/broadcast/DeployPrizePool.s.sol/${chainId}`,
-    `${rootFolder}/broadcast/DeployAaveV3Factory.s.sol/${chainId}`,
+    `${rootFolder}/broadcast/DeployPrizePool.s.sol/${chainId}`
   ];
 }
 
