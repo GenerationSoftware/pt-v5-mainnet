@@ -23,6 +23,7 @@ import { TwabRewards } from "pt-v5-twab-rewards/TwabRewards.sol";
 import { PrizeVaultFactory } from "pt-v5-vault/PrizeVaultFactory.sol";
 import { PrizeVault, IERC4626 } from "pt-v5-vault/PrizeVault.sol";
 import { StakingVault, IERC20 as StakingVaultIERC20 } from "pt-v5-staking-vault/StakingVault.sol";
+import { VaultBoosterFactory } from "pt-v5-vault-boost/VaultBoosterFactory.sol";
 
 string constant addressBookPath = "config/addressBook.txt";
 
@@ -140,7 +141,7 @@ contract DeployPrizePool is ScriptBase {
         ));
 
         stakingVault = new StakingVault(config.stakingVaultName, config.stakingVaultSymbol, StakingVaultIERC20(config.stakedAsset));
-        stakingPrizeVault = new PrizeVault(
+        stakingPrizeVault = prizeVaultFactory.deployVault(
             config.stakingPrizeVaultName,
             config.stakingPrizeVaultSymbol,
             IERC4626(address(stakingVault)),
@@ -166,5 +167,8 @@ contract DeployPrizePool is ScriptBase {
         );
 
         prizePool.setDrawManager(address(drawManager));
+
+        // vault booster factory
+        new VaultBoosterFactory();
     }
 }

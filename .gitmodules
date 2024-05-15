@@ -36,3 +36,6 @@
 [submodule "lib/pt-v5-staking-vault"]
 	path = lib/pt-v5-staking-vault
 	url = https://github.com/GenerationSoftware/pt-v5-staking-vault
+[submodule "lib/pt-v5-vault-boost"]
+	path = lib/pt-v5-vault-boost
+	url = https://github.com/GenerationSoftware/pt-v5-vault-boost

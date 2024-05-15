@@ -4,3 +4,4 @@ import {
 
 writeFiles(31337, "localhost");
 writeFiles(10, "optimism");
+writeFiles(8453, "base");
