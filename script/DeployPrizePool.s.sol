@@ -140,7 +140,7 @@ contract DeployPrizePool is ScriptBase {
         ));
 
         stakingVault = new StakingVault(config.stakingVaultName, config.stakingVaultSymbol, StakingVaultIERC20(config.stakedAsset));
-        stakingPrizeVault = new PrizeVault(
+        stakingPrizeVault = prizeVaultFactory.deployVault(
             config.stakingPrizeVaultName,
             config.stakingPrizeVaultSymbol,
             IERC4626(address(stakingVault)),
