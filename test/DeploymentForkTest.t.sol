@@ -89,7 +89,7 @@ contract LocalForkTest is Test {
         );
         Claimer(addressBook.claimer).claimPrizes(
             addressBook.stakingPrizeVault,
-            1,
+            addressBook.prizePool.numberOfTiers() - 3,
             winners,
             prizeIndices,
             address(this),
