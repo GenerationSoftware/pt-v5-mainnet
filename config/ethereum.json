@@ -2,7 +2,7 @@
     "prize_pool": {
         "tier_liquidity_utilization_rate": "500000000000000000",
         "draw_period_seconds": "2419200",
-        "first_draw_starts_at": "",
+        "first_draw_starts_at": "1725573600",
         "grand_prize_period_draws": "6",
         "number_of_tiers": "4",
         "tier_shares": "100",
@@ -32,7 +32,7 @@
     "draw_manager": {
         "draw_auction_duration": "86400",
         "draw_auction_target_sale_time": "43200",
-        "draw_auction_target_first_sale_fraction": "250000000000000000",
+        "draw_auction_target_first_sale_fraction": "100000000000000000",
         "draw_auction_max_reward": "1000000000000000000",
         "draw_auction_max_retries": "2"
     },
