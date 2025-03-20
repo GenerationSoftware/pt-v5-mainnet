@@ -26,6 +26,7 @@
     "deploy:gnosis:local": "CONFIG=config/gnosis.json SCRIPT_RPC_URL=http://localhost:8545 SCRIPT_PRIVATE_KEY=$LOCAL_PRIVATE_KEY SCRIPT_SENDER=$LOCAL_SENDER SCRIPT_PRIORITY_GAS_PRICE=1000000000 yarn script:pool",
     "deploy:scroll": "CONFIG=config/scroll.json SCRIPT_RPC_URL=$SCROLL_RPC_URL SCRIPT_PRIVATE_KEY=$PRIVATE_KEY SCRIPT_SENDER=$SENDER SCRIPT_VERIFY=--verify SCRIPT_ETHERSCAN=\"--etherscan-api-key $SCROLL_ETHERSCAN_API_KEY\" SCRIPT_PRIORITY_GAS_PRICE=10000 yarn script:pool",
     "deploy:scroll:local": "CONFIG=config/scroll.json SCRIPT_RPC_URL=http://localhost:8545 SCRIPT_PRIVATE_KEY=$LOCAL_PRIVATE_KEY SCRIPT_SENDER=$LOCAL_SENDER SCRIPT_PRIORITY_GAS_PRICE=10000 yarn script:pool",
+    "deploy:world": "CONFIG=config/world.json SCRIPT_RPC_URL=$WORLD_RPC_URL SCRIPT_PRIVATE_KEY=$PRIVATE_KEY SCRIPT_SENDER=$SENDER SCRIPT_VERIFY=--verify SCRIPT_ETHERSCAN=\"--etherscan-api-key $WORLD_ETHERSCAN_API_KEY\" SCRIPT_PRIORITY_GAS_PRICE=100 yarn script:pool",
     "----------ARTIFACT-COMMANDS----------": "",
     "gen:deployments": "ts-node ./script/ts/generateDeployments.ts",
     "----------TESTING-SCRIPTS-(runs after deployment)----------": "",

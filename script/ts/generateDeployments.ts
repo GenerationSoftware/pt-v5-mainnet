@@ -9,3 +9,4 @@ writeFiles(42161, "arbitrum")
 writeFiles(1, "ethereum");
 writeFiles(534352, "scroll");
 writeFiles(100, "gnosis");
+writeFiles(480, "world");
